@@ -11,8 +11,8 @@ namespace CarWash_WPF
 {
     class Database //БЫЛ НЕ STATIC
     {
-        //private static string connectionString = "Server=localhost;Database=carwash;User Id=root;Password=";
-        private static string connectionString = "Server=185.26.122.48;Database=host1277275_nik;User Id=host1277275_nik;Password=123456789";
+        private static string connectionString = "Server=localhost;Database=carwash;User Id=root;Password=";
+        //private static string connectionString = "Server=185.26.122.48;Database=host1277275_nik;User Id=host1277275_nik;Password=123456789";
         private static MySqlConnection connection = new MySqlConnection(connectionString);
 
         public static void ExecuteReader(string query) //НЕ НУЖЕН
