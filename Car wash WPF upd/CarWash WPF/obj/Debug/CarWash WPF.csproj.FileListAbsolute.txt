@@ -69,3 +69,7 @@ C:\Users\Nekit\Documents\Visual Studio 2017\Projects\Car wash WPF upd\CarWash WP
 C:\Users\Nekit\Documents\Visual Studio 2017\Projects\Car wash WPF upd\CarWash WPF\obj\Debug\CarWash WPF.csproj.CoreCompileInputs.cache
 C:\Users\Nekit\Documents\Visual Studio 2017\Projects\Car wash WPF upd\CarWash WPF\obj\Debug\CarWash WPF.exe
 C:\Users\Nekit\Documents\Visual Studio 2017\Projects\Car wash WPF upd\CarWash WPF\obj\Debug\CarWash WPF.pdb
+D:\GitHub\Projects\CarWash\Car wash WPF upd\CarWash WPF\bin\Debug\CarWash WPF.exe.config
+D:\GitHub\Projects\CarWash\Car wash WPF upd\CarWash WPF\obj\Debug\CarWash WPF.csproj.ResolveComReference.cache
+D:\GitHub\Projects\CarWash\Car wash WPF upd\CarWash WPF\obj\Debug\CarWash WPF.exe
+D:\GitHub\Projects\CarWash\Car wash WPF upd\CarWash WPF\obj\Debug\CarWash WPF.pdb
