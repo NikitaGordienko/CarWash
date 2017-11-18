@@ -36,13 +36,13 @@ namespace CarWash_WPF
             {
                 // Создание объектов DataTable
                 DataTable ClientsDT = Database.CreateDataTable(ShowAllClientsQuery);
-                ClientsDT.TableName = "Clients";
+                ClientsDT.TableName = "client";
 
                 DataTable AppointmentsDT = Database.CreateDataTable(ShowAllAppointmentsQuery);
-                AppointmentsDT.TableName = "Appointments";
+                AppointmentsDT.TableName = "appointment";
 
                 DataTable FeedbackDT = Database.CreateDataTable(ShowAllFeedbackQuery);
-                FeedbackDT.TableName = "Feedback";
+                FeedbackDT.TableName = "review";
 
                 // Добавление таблиц в объект DataSet
                 DS.Tables.Add(ClientsDT);
@@ -75,9 +75,9 @@ namespace CarWash_WPF
             //}
 
             // Объявление источников для DG
-            DGClients.ItemsSource = DS.Tables["Clients"].DefaultView;
-            DGAppointments.ItemsSource = DS.Tables["Appointments"].DefaultView;
-            DGFeedback.ItemsSource = DS.Tables["Feedback"].DefaultView;
+            DGClients.ItemsSource = DS.Tables[0].DefaultView;
+            DGAppointments.ItemsSource = DS.Tables[1].DefaultView;
+            DGFeedback.ItemsSource = DS.Tables[2].DefaultView;
 
             // Настройка отображения DGV элементов
             DGClients.CanUserResizeColumns = false;

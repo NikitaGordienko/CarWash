@@ -131,5 +131,46 @@ namespace CarWash_WPF
             return newDate;
         }
 
+        // На вход получает объект таблицы, который соответствует DG и индекс выбранной строки в DG
+        public static string FormDeleteRecordQuery(DataTable editableTable, int selectedIndex)
+        {
+            // Определение системного ID записи
+            int id = IdentifyID(editableTable, selectedIndex);
+            // Формирование запроса
+            string query = $"DELETE FROM {editableTable.TableName} WHERE {editableTable.TableName}_id = {id}";
+
+            return query;
+        }
+
+        public static string FormChangeRecordQuery(DataTable editableTable, int selectedIndex)
+        {
+            /*
+             * Пока что запрос формируется на основе массива rowElements, который потом нужно будет передавать в метод в качестве параметра массива измененных значений
+             * Так же пока не понятно, будет ли работать метод, если нарушить структуру ID в DG
+             */
+            object[] rowElements = editableTable.Rows[selectedIndex].ItemArray;
+
+            int id = IdentifyID(editableTable, selectedIndex);
+            string query = $"UPDATE {editableTable.TableName} SET ";
+
+            /* Тестирование проводилось для DGAppointments, в котором первые два столбца - первичные ключи, поэтому отсчет начинается с 2. (Так же нужно добавить как параметр метода)
+             * Или придумать другой способ отличать значения PK и FK от других атрибутов (например по _id)
+             */
+            for (int i = 2; i < rowElements.Length; i++)
+            {
+                query += editableTable.Columns[i].ColumnName + "=" + rowElements[i].ToString()+ " ";
+            }
+
+            query += $"WHERE {editableTable.TableName}_id = {id}";
+
+            return query;
+        }
+
+        public static int IdentifyID(DataTable editableTable, int selectedIndex)
+        {
+            int id = (int)editableTable.Rows[selectedIndex][0];
+            return id;
+        }
+
     }
 }
