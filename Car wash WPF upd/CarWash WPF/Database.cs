@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using MySql.Data.MySqlClient;
 using System.Data;
+using System.Windows.Controls;
 
 namespace CarWash_WPF
 {
@@ -65,7 +66,7 @@ namespace CarWash_WPF
                 try
                 {
                     command.ExecuteNonQuery();
-                    transaction.Commit();
+                    transaction.Commit();                   
                 }
                 catch (Exception e)
                 {
@@ -132,17 +133,14 @@ namespace CarWash_WPF
         }
 
         // На вход получает объект таблицы, который соответствует DG и индекс выбранной строки в DG
-        public static string FormDeleteRecordQuery(DataTable editableTable, int selectedIndex)
+        public static string FormDeleteRecordQuery(DataTable editableTable_1, DataTable whereTable_2, int selectedIndex)
         {
-            // Определение системного ID записи
-            int id = IdentifyID(editableTable, selectedIndex);
             // Формирование запроса
-            string query = $"DELETE FROM {editableTable.TableName} WHERE {editableTable.TableName}_id = {id}";
-
+            string query = $"DELETE FROM {editableTable_1.TableName} WHERE {whereTable_2.TableName}_id = {selectedIndex}";
             return query;
         }
 
-        public static string FormChangeRecordQuery(DataTable editableTable, int selectedIndex)
+        public static string FormChangeRecordQuery(DataGrid editableDG, DataTable editableTable, int selectedIndex, int startColumn)
         {
             /*
              * Пока что запрос формируется на основе массива rowElements, который потом нужно будет передавать в метод в качестве параметра массива измененных значений
@@ -150,20 +148,29 @@ namespace CarWash_WPF
              */
             object[] rowElements = editableTable.Rows[selectedIndex].ItemArray;
 
-            int id = IdentifyID(editableTable, selectedIndex);
+            int itemValue = GetItemValue(editableDG); 
             string query = $"UPDATE {editableTable.TableName} SET ";
-
+            MessageBox.Show(query);
             /* Тестирование проводилось для DGAppointments, в котором первые два столбца - первичные ключи, поэтому отсчет начинается с 2. (Так же нужно добавить как параметр метода)
              * Или придумать другой способ отличать значения PK и FK от других атрибутов (например по _id)
-             */
-            for (int i = 2; i < rowElements.Length; i++)
+             */            
+            for (int i = startColumn; i < rowElements.Length; i++) 
             {
-                query += editableTable.Columns[i].ColumnName + "=" + rowElements[i].ToString()+ " ";
+                query += editableTable.Columns[i].ColumnName + "=" + rowElements[i].ToString()+ " "; //ИЗМЕНИТЬ ЗАПРОС
             }
 
-            query += $"WHERE {editableTable.TableName}_id = {id}";
+            query += $"WHERE {editableTable.TableName}_id = {itemValue}";
 
             return query;
+        }
+
+        public static int GetItemValue(DataGrid editableDG)
+        {
+            int currentRowIndex = editableDG.SelectedIndex + 1;
+            TextBlock tbID = editableDG.Columns[0].GetCellContent(editableDG.Items[currentRowIndex - 1]) as TextBlock; //получаем значение ячейки *_id выбранной строки
+            string textItemID = tbID.Text;
+            int selectedItemID = int.Parse(textItemID);
+            return selectedItemID;
         }
 
         public static int IdentifyID(DataTable editableTable, int selectedIndex)

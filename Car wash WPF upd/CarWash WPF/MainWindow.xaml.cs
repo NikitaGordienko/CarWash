@@ -37,10 +37,8 @@ namespace CarWash_WPF
                 // Создание объектов DataTable
                 DataTable ClientsDT = Database.CreateDataTable(ShowAllClientsQuery);
                 ClientsDT.TableName = "client";
-
                 DataTable AppointmentsDT = Database.CreateDataTable(ShowAllAppointmentsQuery);
                 AppointmentsDT.TableName = "appointment";
-
                 DataTable FeedbackDT = Database.CreateDataTable(ShowAllFeedbackQuery);
                 FeedbackDT.TableName = "review";
 
@@ -49,7 +47,13 @@ namespace CarWash_WPF
                 DS.Tables.Add(AppointmentsDT);
                 DS.Tables.Add(FeedbackDT);
 
-
+                //btnChangeClients.Visibility = Visibility.Hidden;
+                //btnDeleteClients.Visibility = Visibility.Hidden;
+                //btnChangeAppointments.Visibility = Visibility.Hidden;
+                //btnDeleteAppointments.Visibility = Visibility.Hidden;
+                //btnChangeFeedback.Visibility = Visibility.Hidden;
+                //btnDeleteFeedback.Visibility = Visibility.Hidden;
+                btnApplyClientChanges.Visibility = Visibility.Hidden;
             }
             catch (Exception e)
             {
@@ -82,11 +86,11 @@ namespace CarWash_WPF
             // Настройка отображения DGV элементов
             DGClients.CanUserResizeColumns = false;
             DGClients.IsReadOnly = true;
-            DGClients.Columns[0].Header = "Номер клиента";
-            DGClients.Columns[1].Header = "Имя";
-            DGClients.Columns[2].Header = "Номер телефона";
-            DGClients.Columns[3].Header = "Email";
-            DGClients.Columns[4].Header = "Комментарий о клиенте";
+            //DGClients.Columns[0].Header = "Номер клиента";
+            //DGClients.Columns[1].Header = "Имя";
+            //DGClients.Columns[2].Header = "Номер телефона";
+            //DGClients.Columns[3].Header = "Email";
+            //DGClients.Columns[4].Header = "Комментарий о клиенте";
 
 
             DGAppointments.CanUserResizeColumns = false;
@@ -161,5 +165,53 @@ namespace CarWash_WPF
         {
             Application.Current.Shutdown();
         }
+
+        private void btnChangeClients_Click(object sender, RoutedEventArgs e)
+        {
+            btnApplyClientChanges.Visibility = Visibility.Visible;
+            DGClients.IsReadOnly = false;
+            int currentRowIndex = DGClients.SelectedIndex;
+        }
+
+        private void btnApplyClientChanges_Click(object sender, RoutedEventArgs e)
+        {
+            int currentRowIndex = DGClients.SelectedIndex;
+            string res = Database.FormChangeRecordQuery(DGClients, DS.Tables[0], currentRowIndex, 1); //client_id не меняется (первичный ключ), поэтому изменения принимаются со второго столбца
+            MessageBox.Show(res);
+        }
+
+        private void btnDeleteClients_Click(object sender, RoutedEventArgs e)
+        {
+            int selectedItemID = Database.GetItemValue(DGClients);
+            string deleteClientQuery = Database.FormDeleteRecordQuery(DS.Tables[0], DS.Tables[0],selectedItemID);
+            Database.ExecuteWriter(deleteClientQuery);
+        }
+
+        private void btnChangeAppointments_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void btnDeleteAppointments_Click(object sender, RoutedEventArgs e)
+        {
+            int selectedItemID = Database.GetItemValue(DGAppointments);
+            string deleteAppointmentQuery = Database.FormDeleteRecordQuery(DS.Tables[1], DS.Tables[1],selectedItemID);  
+            Database.ExecuteWriter(deleteAppointmentQuery);
+
+        }
+
+        private void btnChangeFeedback_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnDeleteFeedback_Click(object sender, RoutedEventArgs e)
+        {
+            int selectedItemID = Database.GetItemValue(DGFeedback);
+            string deleteFeedbackQuery = Database.FormDeleteRecordQuery(DS.Tables[2], DS.Tables[1], selectedItemID); //второй передаваемый параметр -> DS.Tables[1], т.к. при удалении из таблицы REVIEW требует appointment_id
+            Database.ExecuteWriter(deleteFeedbackQuery);
+        }
+
+        
     }
 }

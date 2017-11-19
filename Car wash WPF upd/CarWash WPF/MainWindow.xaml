@@ -19,26 +19,33 @@
         <Button x:Name="btnAppointments" Content="Записи" HorizontalAlignment="Left" Margin="30,248,0,387" Width="250" Background="{x:Null}" FontFamily="Microsoft JhengHei Light" FontSize="36" Click="btnAppointments_Click"/>
         <Button x:Name="btnReports" Content="Отчеты" HorizontalAlignment="Left" Margin="30,454,0,182" Width="250" Background="{x:Null}" FontFamily="Microsoft JhengHei Light" FontSize="36" Click="btnReports_Click"/>
         <Button x:Name="btnFeedback" Content="Отзывы" HorizontalAlignment="Left" Margin="30,351,0,285" Width="250" Background="{x:Null}" FontFamily="Microsoft JhengHei Light" FontSize="36" Click="btnFeedback_Click"/>
-        <TabControl x:Name="mwTab" Height="616" Margin="322,33,28,0" VerticalAlignment="Top" BorderBrush="{x:Null}">
+        <TabControl x:Name="mwTab" Height="677" Margin="322,33,28,0" VerticalAlignment="Top" BorderBrush="{x:Null}">
             <TabItem x:Name="tabClients" Header="Клиенты" Margin="-40,-31,36,29">
-                <Grid x:Name="pageClients" Background="#FFE5E5E5">
-                    <DataGrid x:Name="DGClients" HorizontalAlignment="Left" Height="588" VerticalAlignment="Top" Width="924" FontSize="15" FontFamily="Microsoft JhengHei Light" CanUserResizeColumns="False" CanUserReorderColumns="False" BorderBrush="#FF878787"/>
+                <Grid x:Name="pageClients" Background="White">
+                    <DataGrid x:Name="DGClients" HorizontalAlignment="Left" Height="566" VerticalAlignment="Top" Width="924" FontSize="15" FontFamily="Microsoft JhengHei Light" CanUserResizeColumns="False" CanUserReorderColumns="False" BorderBrush="#FF878787"/>
+                    <Button x:Name="btnChangeClients" Content="Изменить" HorizontalAlignment="Left" Margin="0,588,0,0" VerticalAlignment="Top" Width="154" Background="#FF007ACC" Foreground="White" Height="39" FontFamily="Microsoft JhengHei Light" FontSize="18" BorderThickness="0" Click="btnChangeClients_Click" />
+                    <Button x:Name="btnDeleteClients" Content="Удалить" HorizontalAlignment="Left" Margin="195,588,0,0" VerticalAlignment="Top" Width="154" Background="#FF007ACC" Foreground="White" Height="39" FontFamily="Microsoft JhengHei Light" FontSize="18" BorderThickness="0" Click="btnDeleteClients_Click" />
+                    <Button x:Name="btnApplyClientChanges" Content="Применить" HorizontalAlignment="Left" Margin="389,588,0,0" VerticalAlignment="Top" Width="154" Background="#FF007ACC" Foreground="White" Height="39" FontFamily="Microsoft JhengHei Light" FontSize="18" BorderThickness="0" Click="btnApplyClientChanges_Click"/>
                 </Grid>
             </TabItem>
             <TabItem x:Name="tabAppointments" Header="Записи" Margin="-37,-31,33,29">
-                <Grid x:Name="pageAppointments" Background="#FFE5E5E5">
-                    <DataGrid x:Name="DGAppointments" HorizontalAlignment="Left" Height="588" VerticalAlignment="Top" Width="924" FontFamily="Microsoft JhengHei Light" FontSize="15" BorderBrush="White"/>
+                <Grid x:Name="pageAppointments" Background="White">
+                    <DataGrid x:Name="DGAppointments" HorizontalAlignment="Left" Height="566" VerticalAlignment="Top" Width="924" FontFamily="Microsoft JhengHei Light" FontSize="15" BorderBrush="White" SelectionUnit="FullRow"/>
+                    <Button x:Name="btnChangeAppointments" Content="Изменить" HorizontalAlignment="Left" Margin="0,588,0,0" VerticalAlignment="Top" Width="154" Background="#FF007ACC" Foreground="White" Height="39" FontFamily="Microsoft JhengHei Light" FontSize="18" BorderThickness="0" Click="btnChangeAppointments_Click" />
+                    <Button x:Name="btnDeleteAppointments" Content="Удалить" HorizontalAlignment="Left" Margin="195,588,0,0" VerticalAlignment="Top" Width="154" Background="#FF007ACC" Foreground="White" Height="39" FontFamily="Microsoft JhengHei Light" FontSize="18" BorderThickness="0" Click="btnDeleteAppointments_Click" />
                 </Grid>
             </TabItem>
             <TabItem x:Name="tabFeedback" Header="Отзывы" Margin="-33,-31,29,29" BorderBrush="#FF878787">
-                <Grid x:Name="pageFeedback" Background="#FFE5E5E5">
-                    <DataGrid x:Name="DGFeedback" HorizontalAlignment="Left" Height="588" VerticalAlignment="Top" Width="924" FontSize="15" FontFamily="Microsoft JhengHei Light" BorderBrush="#FF878787"/>
+                <Grid x:Name="pageFeedback" Background="White">
+                    <DataGrid x:Name="DGFeedback" HorizontalAlignment="Left" Height="566" VerticalAlignment="Top" Width="924" FontSize="15" FontFamily="Microsoft JhengHei Light" BorderBrush="#FF878787"/>
+                    <Button x:Name="btnChangeFeedback" Content="Изменить" HorizontalAlignment="Left" Margin="0,588,0,0" VerticalAlignment="Top" Width="154" Background="#FF007ACC" Foreground="White" Height="39" FontFamily="Microsoft JhengHei Light" FontSize="18" BorderThickness="0" Click="btnChangeFeedback_Click" />
+                    <Button x:Name="btnDeleteFeedback" Content="Удалить" HorizontalAlignment="Left" Margin="195,588,0,0" VerticalAlignment="Top" Width="154" Background="#FF007ACC" Foreground="White" Height="39" FontFamily="Microsoft JhengHei Light" FontSize="18" BorderThickness="0" Click="btnDeleteFeedback_Click" />
                 </Grid>
             </TabItem>
             <TabItem x:Name="tabReports" Header="Отчеты" Margin="-29,-31,25,29" BorderBrush="#FF878787">
                 <Grid x:Name="pageReports"/>
             </TabItem>
         </TabControl>
-        <Rectangle Fill="#FF878787" HorizontalAlignment="Left" Height="593" Margin="301,56,0,0" Stroke="Black" VerticalAlignment="Top" Width="1" Opacity="0.2"/>
+        <Rectangle Fill="#FF878787" HorizontalAlignment="Left" Height="564" Margin="301,59,0,0" Stroke="Black" VerticalAlignment="Top" Width="1" Opacity="0.2"/>
     </Grid>
 </Window>
