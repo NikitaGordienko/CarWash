@@ -133,44 +133,31 @@ namespace CarWash_WPF
         }
 
         // На вход получает объект таблицы, который соответствует DG и индекс выбранной строки в DG
-        public static string FormDeleteRecordQuery(DataTable editableTable_1, DataTable whereTable_2, int selectedIndex)
+        public static string FormDeleteRecordQuery(DataTable editableTable, DataTable whereTable, int selectedIndex)
         {
-            // Формирование запроса
-            string query = $"DELETE FROM {editableTable_1.TableName} WHERE {whereTable_2.TableName}_id = {selectedIndex}";
+            int selectedID = IdentifyID(editableTable, selectedIndex);
+            string query = $"DELETE FROM {editableTable.TableName} WHERE {whereTable.TableName}_id = {selectedID}";
             return query;
         }
 
-        public static string FormChangeRecordQuery(DataGrid editableDG, DataTable editableTable, int selectedIndex, int startColumn)
+        public static string FormChangeRecordQuery(DataTable editableTable, DataTable whereTable, int selectedIndex, int startColumn)
         {
             /*
              * Пока что запрос формируется на основе массива rowElements, который потом нужно будет передавать в метод в качестве параметра массива измененных значений
              * Так же пока не понятно, будет ли работать метод, если нарушить структуру ID в DG
              */
             object[] rowElements = editableTable.Rows[selectedIndex].ItemArray;
-
-            int itemValue = GetItemValue(editableDG); 
+            int selectedID = IdentifyID(editableTable, selectedIndex); 
             string query = $"UPDATE {editableTable.TableName} SET ";
-            MessageBox.Show(query);
-            /* Тестирование проводилось для DGAppointments, в котором первые два столбца - первичные ключи, поэтому отсчет начинается с 2. (Так же нужно добавить как параметр метода)
-             * Или придумать другой способ отличать значения PK и FK от других атрибутов (например по _id)
-             */            
-            for (int i = startColumn; i < rowElements.Length; i++) 
+       
+            for (int i = startColumn; i < rowElements.Length-1; i++) 
             {
-                query += editableTable.Columns[i].ColumnName + "=" + rowElements[i].ToString()+ " "; //ИЗМЕНИТЬ ЗАПРОС
+                query += editableTable.Columns[i].ColumnName + "=" + "\"" + rowElements[i].ToString()+ "\", "; //ИЗМЕНИТЬ ЗАПРОС
             }
-
-            query += $"WHERE {editableTable.TableName}_id = {itemValue}";
+            query += editableTable.Columns[rowElements.Length - 1].ColumnName + "=" + "\"" + rowElements[rowElements.Length - 1].ToString() + "\" "; // Запятой перед WHERE быть не должно
+            query += $"WHERE {whereTable.TableName}_id = {selectedID}";
 
             return query;
-        }
-
-        public static int GetItemValue(DataGrid editableDG)
-        {
-            int currentRowIndex = editableDG.SelectedIndex + 1;
-            TextBlock tbID = editableDG.Columns[0].GetCellContent(editableDG.Items[currentRowIndex - 1]) as TextBlock; //получаем значение ячейки *_id выбранной строки
-            string textItemID = tbID.Text;
-            int selectedItemID = int.Parse(textItemID);
-            return selectedItemID;
         }
 
         public static int IdentifyID(DataTable editableTable, int selectedIndex)
