@@ -140,7 +140,7 @@ namespace CarWash_WPF
             return query;
         }
 
-        public static string FormChangeRecordQuery(DataTable editableTable, DataTable whereTable, int selectedIndex, int startColumn)
+        public static string FormChangeRecordQuery(DataTable editableTable, DataTable whereTable, int selectedIndex, bool withDate)
         {
             /*
              * Пока что запрос формируется на основе массива rowElements, который потом нужно будет передавать в метод в качестве параметра массива измененных значений
@@ -149,10 +149,19 @@ namespace CarWash_WPF
             object[] rowElements = editableTable.Rows[selectedIndex].ItemArray;
             int selectedID = IdentifyID(editableTable, selectedIndex); 
             string query = $"UPDATE {editableTable.TableName} SET ";
-       
-            for (int i = startColumn; i < rowElements.Length-1; i++) 
+
+            for (int i = 0; i < rowElements.Length-1; i++) 
             {
-                query += editableTable.Columns[i].ColumnName + "=" + "\"" + rowElements[i].ToString()+ "\", "; //ИЗМЕНИТЬ ЗАПРОС
+                if (withDate == true)
+                {
+                    if (i == 3) continue;
+                    query += editableTable.Columns[i].ColumnName + "=" + "\"" + rowElements[i].ToString() + "\", ";
+                }
+                else
+                {
+                    query += editableTable.Columns[i].ColumnName + "=" + "\"" + rowElements[i].ToString()+ "\", ";
+                }
+                
             }
             query += editableTable.Columns[rowElements.Length - 1].ColumnName + "=" + "\"" + rowElements[rowElements.Length - 1].ToString() + "\" "; // Запятой перед WHERE быть не должно
             query += $"WHERE {whereTable.TableName}_id = {selectedID}";
