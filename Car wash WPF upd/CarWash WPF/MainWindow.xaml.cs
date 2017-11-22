@@ -158,29 +158,39 @@ namespace CarWash_WPF
             Application.Current.Shutdown();
         }
 
+
+        List<string> queryList = new List<string>();
         private void btnChangeClients_Click(object sender, RoutedEventArgs e)
         {
             btnApplyClientChanges.Visibility = Visibility.Visible;
-            DGClients.IsReadOnly = false;
+            DGClients.IsReadOnly = false;           
             DGClients.Columns[0].IsReadOnly = true;
             DGClients.Columns[1].IsReadOnly = true;
         }
 
         private void btnApplyClientChanges_Click(object sender, RoutedEventArgs e)
-        {
-            int currentRowIndex = DGClients.SelectedIndex;
-            string updateQuery = Database.FormChangeRecordQuery(DS.Tables[0], DS.Tables[0], currentRowIndex, false); //client_id не меняется (первичный ключ), поэтому изменения принимаются со второго столбца
-            MessageBox.Show(updateQuery);
-            Database.ExecuteWriter(updateQuery);
+        {      
+            int currentRowIndex = DGClients.SelectedIndex;    
+            string updateQuery = Database.FormChangeRecordQuery(DS.Tables[0], DS.Tables[0], currentRowIndex, false);
+            queryList.Add(updateQuery);
         }
 
         private void btnDeleteClients_Click(object sender, RoutedEventArgs e)
         {
             int currentRowIndex = DGClients.SelectedIndex;
             string deleteQuery = Database.FormDeleteRecordQuery(DS.Tables[0], DS.Tables[0], currentRowIndex);
-            Database.ExecuteWriter(deleteQuery);
-            //RefreshDGClients(); //пока не работает
+            queryList.Add(deleteQuery);
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            for (int i = 0; i < queryList.Count; i++)
+            {
+                Database.ExecuteWriter(queryList[i]);
+            }
+        }
+
+        
 
         private void btnChangeAppointments_Click(object sender, RoutedEventArgs e)
         {
@@ -229,9 +239,6 @@ namespace CarWash_WPF
             Database.ExecuteWriter(deleteQuery);
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
+        
     }
 }

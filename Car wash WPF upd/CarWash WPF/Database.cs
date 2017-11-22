@@ -14,7 +14,7 @@ namespace CarWash_WPF
     {
         // Test
         // Test#2
-        private static string connectionString = "Server=localhost;Database=carwash;User Id=root;Password=";
+        private static string connectionString = "Server=localhost;Database=carwash;User Id=root;Password=;charset=utf8";
         //private static string connectionString = "Server=185.26.122.48;Database=host1277275_nik;User Id=host1277275_nik;Password=123456789";
         private static MySqlConnection connection = new MySqlConnection(connectionString);
 
@@ -164,7 +164,7 @@ namespace CarWash_WPF
                 
             }
             query += editableTable.Columns[rowElements.Length - 1].ColumnName + "=" + "\"" + rowElements[rowElements.Length - 1].ToString() + "\" "; // Запятой перед WHERE быть не должно
-            query += $"WHERE {whereTable.TableName}_id = {selectedID}";
+            query += $"WHERE {whereTable.TableName}_id = {selectedID};";
 
             return query;
         }
