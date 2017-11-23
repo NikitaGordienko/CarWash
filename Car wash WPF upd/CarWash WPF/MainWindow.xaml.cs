@@ -56,7 +56,7 @@ namespace CarWash_WPF
             catch (Exception e)
             {
                 string temp = e.Message;
-                MessageBox.Show($"Невозможно подключиться к базе данных. \nПожалуйста, обратитесь к администратору.\nError: {e.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(string.Format("Невозможно подключиться к базе данных. \nПожалуйста, обратитесь к администратору.\nError: {0}",e.Message), "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }        
 
@@ -183,16 +183,15 @@ namespace CarWash_WPF
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            int xx = queryList.Count;
-            queryList = Database.EliminateQueryInconsistency(queryList);
-           
+            //queryList = Database.EliminateQueryInconsistency(queryList);
             //for (int i = 0; i < queryList.Count; i++)
             //{
+            //    MessageBox.Show(queryList[i]);
             //    Database.ExecuteWriter(queryList[i]);
             //}
+
             for (int i = 0; i < queryList.Count; i++)
             {
-                MessageBox.Show(queryList[i]);
                 Database.ExecuteWriter(queryList[i]);
             }
         }

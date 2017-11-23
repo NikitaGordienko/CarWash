@@ -57,7 +57,7 @@ namespace CarWash_WPF
                 try
                 {
                     connection.Open();
-                    string query_salt = $"SELECT salt from users where `login` = '{tbLogin}'";
+                    string query_salt = string.Format("SELECT salt from users where `login` = '{0}'",tbLogin);
                     MySqlCommand cmnd_salt = new MySqlCommand(query_salt, connection);
                     object resSalt = cmnd_salt.ExecuteScalar();
                     selectedSalt = Convert.ToString(resSalt);
@@ -68,7 +68,7 @@ namespace CarWash_WPF
                         string secondStepCheck = GetSHA256Hash(firstStepCheck + selectedSalt);
                         string finalStepCheck = GetSHA256Hash(secondStepCheck + programConst);
 
-                        string query_check = $"SELECT COUNT(*) from users where `login` = '{tbLogin}' AND `password` = '{finalStepCheck}'";
+                        string query_check = string.Format("SELECT COUNT(*) from users where `login` = '{0}' AND `password` = '{1}'",tbLogin,finalStepCheck);
                         MySqlCommand cmnd_check = new MySqlCommand(query_check, connection);
                         object count = cmnd_check.ExecuteScalar();
                         int loginResult = Convert.ToInt32(count);
