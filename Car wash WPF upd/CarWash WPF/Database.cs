@@ -136,7 +136,7 @@ namespace CarWash_WPF
         public static string FormDeleteRecordQuery(DataTable editableTable, DataTable whereTable, int selectedIndex)
         {
             int selectedID = IdentifyID(editableTable, selectedIndex);
-            string query = $"DELETE FROM {editableTable.TableName} WHERE {whereTable.TableName}_id = {selectedID}";
+            string query = $"DELETE FROM {editableTable.TableName} WHERE {whereTable.TableName}_id = {selectedID};";
             return query;
         }
 
@@ -174,6 +174,63 @@ namespace CarWash_WPF
             int id = (int)editableTable.Rows[selectedIndex][0];
             return id;
         }
+
+        // В приоритет взят запрос на DELETE, т.к либо пользователь удаляет измененную строку, либо пытается изменить уже удаленную строку.
+        // Если формируется два запроса на UPDATE одной строке, то приоритет отдается последнему запросу
+        public static List<string> EliminateQueryInconsistency(List<string> queryList)
+        {
+            List<string> tempList = new List<string>();
+            List<string> finalList = new List<string>();
+
+            for (int i = 0; i < queryList.Count; i++)
+            {
+                string whereID = queryList[i].Substring(queryList[i].LastIndexOf(" ") + 1);
+                for (int j = i; j < queryList.Count; j++)
+                {
+                    if (queryList[j].Contains(whereID))
+                    {
+                        tempList.Add(queryList[j]);
+                        queryList.RemoveAt(j);
+                    }
+                }
+                tempList = DeleteDeduplication(tempList);
+                finalList.AddRange(tempList);
+            }
+
+            return finalList;
+        }
+
+        public static List<string> DeleteDeduplication(List<string> tempList)
+        {
+            int k = 0;
+            while(tempList.Count != 1)
+            {
+                if (tempList.Contains("DELETE"))
+                {
+                    for (int i = 0; i < tempList.Count; i++)
+                    {
+                        if (!tempList[i].Contains("DELETE"))
+                        {
+                            tempList.RemoveAt(i);
+                        }
+                        else
+                        {
+                            k++;
+                        }
+
+                    }
+                }
+                else
+                    tempList.RemoveRange(0, tempList.Count - 1);
+
+                if (k>1)
+                {
+                    tempList.RemoveRange(0, tempList.Count - 1);
+                }
+            }
+            return tempList;
+        }
+
 
     }
 }

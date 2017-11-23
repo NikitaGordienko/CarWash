@@ -13,7 +13,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Windows.Navigation;
 
 namespace CarWash_WPF
 {
@@ -184,13 +183,18 @@ namespace CarWash_WPF
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            queryList = Database.EliminateQueryInconsistency(queryList);
+            //for (int i = 0; i < queryList.Count; i++)
+            //{
+            //    Database.ExecuteWriter(queryList[i]);
+            //}
             for (int i = 0; i < queryList.Count; i++)
             {
-                Database.ExecuteWriter(queryList[i]);
+                MessageBox.Show(queryList[i]);
             }
         }
 
-        
+
 
         private void btnChangeAppointments_Click(object sender, RoutedEventArgs e)
         {

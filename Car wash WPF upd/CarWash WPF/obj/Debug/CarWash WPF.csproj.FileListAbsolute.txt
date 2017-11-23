@@ -77,7 +77,6 @@ D:\GitHub\Projects\CarWash\Car wash WPF upd\CarWash WPF\bin\Debug\CarWash WPF.ex
 D:\GitHub\Projects\CarWash\Car wash WPF upd\CarWash WPF\bin\Debug\CarWash WPF.pdb
 D:\GitHub\Projects\CarWash\Car wash WPF upd\CarWash WPF\bin\Debug\MySql.Data.dll
 D:\GitHub\Projects\CarWash\Car wash WPF upd\CarWash WPF\bin\Debug\MySql.Data.xml
-D:\GitHub\Projects\CarWash\Car wash WPF upd\CarWash WPF\obj\Debug\CarWash WPF.csprojResolveAssemblyReference.cache
 D:\GitHub\Projects\CarWash\Car wash WPF upd\CarWash WPF\obj\Debug\LoginPage.g.cs
 D:\GitHub\Projects\CarWash\Car wash WPF upd\CarWash WPF\obj\Debug\MainWindow.g.cs
 D:\GitHub\Projects\CarWash\Car wash WPF upd\CarWash WPF\obj\Debug\ReportsWindow.g.cs
@@ -116,3 +115,4 @@ C:\Users\Nekit\Documents\GitHub\CarWash\Car wash WPF upd\CarWash WPF\obj\Debug\C
 C:\Users\Nekit\Documents\GitHub\CarWash\Car wash WPF upd\CarWash WPF\obj\Debug\CarWash WPF.csproj.CoreCompileInputs.cache
 C:\Users\Nekit\Documents\GitHub\CarWash\Car wash WPF upd\CarWash WPF\obj\Debug\CarWash WPF.exe
 C:\Users\Nekit\Documents\GitHub\CarWash\Car wash WPF upd\CarWash WPF\obj\Debug\CarWash WPF.pdb
+D:\GitHub\Projects\CarWash\Car wash WPF upd\CarWash WPF\obj\Debug\CarWash WPF.csprojResolveAssemblyReference.cache
