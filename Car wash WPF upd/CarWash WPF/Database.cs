@@ -175,17 +175,17 @@ namespace CarWash_WPF
             return id;
         }
 
-        // В приоритет взят запрос на DELETE, т.к либо пользователь удаляет измененную строку, либо пытается изменить уже удаленную строку.
-        // Если формируется два запроса на UPDATE одной строке, то приоритет отдается последнему запросу
+        // В приоритет взят запрос на DELETE, т.к либо пользователь удаляет измененную строку, либо пытается изменить уже удаленную строку. - V
+        // Если формируется два запроса на UPDATE одной строке, то приоритет отдается последнему запросу - X
         public static List<string> EliminateQueryInconsistency(List<string> queryList)
         {
             List<string> tempList = new List<string>();
             List<string> finalList = new List<string>();
-
-            for (int i = 0; i < queryList.Count; i++)
-            {
+            int y = queryList.Count;
+            for (int i = 0; i < y; i++)
+            { 
                 string whereID = queryList[i].Substring(queryList[i].LastIndexOf(" ") + 1);
-                for (int j = i; j < queryList.Count; j++)
+                for (int j = i; j < y; j++)
                 {
                     if (queryList[j].Contains(whereID))
                     {
@@ -195,6 +195,7 @@ namespace CarWash_WPF
                 }
                 tempList = DeleteDeduplication(tempList);
                 finalList.AddRange(tempList);
+                tempList = null;
             }
 
             return finalList;
