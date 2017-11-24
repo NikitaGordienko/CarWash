@@ -181,23 +181,24 @@ namespace CarWash_WPF
         {
             List<string> tempList = new List<string>();
             List<string> finalList = new List<string>();
-            int y = queryList.Count;
-            for (int i = 0; i < y; i++)
+
+            for (int i = 0; i < queryList.Count; i++)
             { 
                 string whereID = queryList[i].Substring(queryList[i].LastIndexOf(" ") + 1);
-                for (int j = i; j < y; j++)
-                {
+                for (int j = i; j < queryList.Count; j++)
+                { 
                     if (queryList[j].Contains(whereID))
                     {
                         tempList.Add(queryList[j]);
-                        queryList.RemoveAt(j);
+                        queryList[j] = "NULL";
                     }
                 }
                 tempList = DeleteDeduplication(tempList);
                 finalList.AddRange(tempList);
-                tempList = null;
+                tempList.Clear();
             }
 
+            finalList = RemoveNullItems(finalList);
             return finalList;
         }
 
@@ -230,6 +231,15 @@ namespace CarWash_WPF
                 }
             }
             return tempList;
+        }
+
+        public static List<string> RemoveNullItems(List<string> finalList)
+        {
+            while (finalList.Contains("NULL"))
+            {
+                finalList.Remove("NULL");
+            }
+            return finalList;
         }
 
 
