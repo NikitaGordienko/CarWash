@@ -183,17 +183,17 @@ namespace CarWash_WPF
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            //queryList = Database.EliminateQueryInconsistency(queryList);
-            //for (int i = 0; i < queryList.Count; i++)
-            //{
-            //    MessageBox.Show(queryList[i]);
-            //    Database.ExecuteWriter(queryList[i]);
-            //}
-
+            queryList = Database.EliminateQueryInconsistency(queryList);
             for (int i = 0; i < queryList.Count; i++)
             {
+                MessageBox.Show(queryList[i]);
                 Database.ExecuteWriter(queryList[i]);
             }
+
+            //for (int i = 0; i < queryList.Count; i++)
+            //{
+            //    Database.ExecuteWriter(queryList[i]);
+            //}
         }
 
 
