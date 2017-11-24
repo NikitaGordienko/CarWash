@@ -27,7 +27,7 @@ namespace CarWash_WPF
         }
 
         private static string connectionString = @"Data Source=localhost;Initial Catalog=carwash;User ID=root;Password=""""; charset=utf8";
-        // private static string connectionString = "Server=185.26.122.48;Database=host1277275_nik;User Id=host1277275_nik;Password=123456789";
+        // private static string connectionString = "Server=185.26.122.48;Database=host1277275_nik;User Id=host1277275_nik;Password=123456789;charset=utf8";
         private static MySqlConnection connection = new MySqlConnection(connectionString);
 
         public static string GetSHA256Hash(string input)
@@ -57,7 +57,7 @@ namespace CarWash_WPF
                 try
                 {
                     connection.Open();
-                    string query_salt = string.Format("SELECT salt from users where `login` = '{0}'",tbLogin);
+                    string query_salt = $"SELECT salt from users where `login` = '{tbLogin}'";
                     MySqlCommand cmnd_salt = new MySqlCommand(query_salt, connection);
                     object resSalt = cmnd_salt.ExecuteScalar();
                     selectedSalt = Convert.ToString(resSalt);
@@ -68,7 +68,7 @@ namespace CarWash_WPF
                         string secondStepCheck = GetSHA256Hash(firstStepCheck + selectedSalt);
                         string finalStepCheck = GetSHA256Hash(secondStepCheck + programConst);
 
-                        string query_check = string.Format("SELECT COUNT(*) from users where `login` = '{0}' AND `password` = '{1}'",tbLogin,finalStepCheck);
+                        string query_check = $"SELECT COUNT(*) from users where `login` = '{tbLogin}' AND `password` = '{finalStepCheck}'";
                         MySqlCommand cmnd_check = new MySqlCommand(query_check, connection);
                         object count = cmnd_check.ExecuteScalar();
                         int loginResult = Convert.ToInt32(count);

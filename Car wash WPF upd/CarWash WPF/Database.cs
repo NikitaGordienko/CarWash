@@ -136,7 +136,7 @@ namespace CarWash_WPF
         public static string FormDeleteRecordQuery(DataTable editableTable, DataTable whereTable, int selectedIndex)
         {
             int selectedID = IdentifyID(editableTable, selectedIndex);
-            string query = string.Format("DELETE FROM {0} WHERE {1}_id = {2};",editableTable.TableName,whereTable.TableName,selectedID);
+            string query = $"DELETE FROM {editableTable.TableName} WHERE {whereTable.TableName}_id = {selectedID};";
             return query;
         }
 
@@ -148,7 +148,7 @@ namespace CarWash_WPF
              */
             object[] rowElements = editableTable.Rows[selectedIndex].ItemArray;
             int selectedID = IdentifyID(editableTable, selectedIndex); 
-            string query = string.Format("UPDATE {0} SET ",editableTable.TableName);
+            string query = $"UPDATE {editableTable.TableName} SET ";
 
             for (int i = 0; i < rowElements.Length-1; i++) 
             {
@@ -164,7 +164,7 @@ namespace CarWash_WPF
                 
             }
             query += editableTable.Columns[rowElements.Length - 1].ColumnName + "=" + "\"" + rowElements[rowElements.Length - 1].ToString() + "\" "; // Запятой перед WHERE быть не должно
-            query += string.Format("WHERE {0}_id = {1};",whereTable.TableName,selectedID);
+            query += $"WHERE {whereTable.TableName}_id = {selectedID};";
 
             return query;
         }
