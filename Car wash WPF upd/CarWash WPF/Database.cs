@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using MySql.Data.MySqlClient;
 using System.Data;
+using System.Windows.Controls;
 
 namespace CarWash_WPF
 {
@@ -13,7 +14,7 @@ namespace CarWash_WPF
     {
         // Test
         // Test#2
-        private static string connectionString = "Server=localhost;Database=carwash;User Id=root;Password=";
+        private static string connectionString = "Server=localhost;Database=carwash;User Id=root;Password=;charset=utf8";
         //private static string connectionString = "Server=185.26.122.48;Database=host1277275_nik;User Id=host1277275_nik;Password=123456789";
         private static MySqlConnection connection = new MySqlConnection(connectionString);
 
@@ -65,7 +66,7 @@ namespace CarWash_WPF
                 try
                 {
                     command.ExecuteNonQuery();
-                    transaction.Commit();
+                    transaction.Commit();                   
                 }
                 catch (Exception e)
                 {
@@ -132,36 +133,38 @@ namespace CarWash_WPF
         }
 
         // На вход получает объект таблицы, который соответствует DG и индекс выбранной строки в DG
-        public static string FormDeleteRecordQuery(DataTable editableTable, int selectedIndex)
+        public static string FormDeleteRecordQuery(DataTable editableTable, DataTable whereTable, int selectedIndex)
         {
-            // Определение системного ID записи
-            int id = IdentifyID(editableTable, selectedIndex);
-            // Формирование запроса
-            string query = $"DELETE FROM {editableTable.TableName} WHERE {editableTable.TableName}_id = {id}";
-
+            int selectedID = IdentifyID(editableTable, selectedIndex);
+            string query = $"DELETE FROM {editableTable.TableName} WHERE {whereTable.TableName}_id = {selectedID};";
             return query;
         }
 
-        public static string FormChangeRecordQuery(DataTable editableTable, int selectedIndex)
+        public static string FormChangeRecordQuery(DataTable editableTable, DataTable whereTable, int selectedIndex, bool withDate)
         {
             /*
              * Пока что запрос формируется на основе массива rowElements, который потом нужно будет передавать в метод в качестве параметра массива измененных значений
              * Так же пока не понятно, будет ли работать метод, если нарушить структуру ID в DG
              */
             object[] rowElements = editableTable.Rows[selectedIndex].ItemArray;
-
-            int id = IdentifyID(editableTable, selectedIndex);
+            int selectedID = IdentifyID(editableTable, selectedIndex); 
             string query = $"UPDATE {editableTable.TableName} SET ";
 
-            /* Тестирование проводилось для DGAppointments, в котором первые два столбца - первичные ключи, поэтому отсчет начинается с 2. (Так же нужно добавить как параметр метода)
-             * Или придумать другой способ отличать значения PK и FK от других атрибутов (например по _id)
-             */
-            for (int i = 2; i < rowElements.Length; i++)
+            for (int i = 0; i < rowElements.Length-1; i++) 
             {
-                query += editableTable.Columns[i].ColumnName + "=" + rowElements[i].ToString()+ " ";
+                if (withDate == true)
+                {
+                    if (i == 3) continue;
+                    query += editableTable.Columns[i].ColumnName + "=" + "\"" + rowElements[i].ToString() + "\", ";
+                }
+                else
+                {
+                    query += editableTable.Columns[i].ColumnName + "=" + "\"" + rowElements[i].ToString()+ "\", ";
+                }
+                
             }
-
-            query += $"WHERE {editableTable.TableName}_id = {id}";
+            query += editableTable.Columns[rowElements.Length - 1].ColumnName + "=" + "\"" + rowElements[rowElements.Length - 1].ToString() + "\" "; // Запятой перед WHERE быть не должно
+            query += $"WHERE {whereTable.TableName}_id = {selectedID};";
 
             return query;
         }
@@ -171,6 +174,74 @@ namespace CarWash_WPF
             int id = (int)editableTable.Rows[selectedIndex][0];
             return id;
         }
+
+        // В приоритет взят запрос на DELETE, т.к либо пользователь удаляет измененную строку, либо пытается изменить уже удаленную строку. - V
+        // Если формируется два запроса на UPDATE одной строке, то приоритет отдается последнему запросу - X
+        public static List<string> EliminateQueryInconsistency(List<string> queryList)
+        {
+            List<string> tempList = new List<string>();
+            List<string> finalList = new List<string>();
+
+            for (int i = 0; i < queryList.Count; i++)
+            { 
+                string whereID = queryList[i].Substring(queryList[i].LastIndexOf(" ") + 1);
+                for (int j = i; j < queryList.Count; j++)
+                { 
+                    if (queryList[j].Contains(whereID))
+                    {
+                        tempList.Add(queryList[j]);
+                        queryList[j] = "NULL";
+                    }
+                }
+                tempList = DeleteDeduplication(tempList);
+                finalList.AddRange(tempList);
+                tempList.Clear();
+            }
+
+            finalList = RemoveNullItems(finalList);
+            return finalList;
+        }
+
+        public static List<string> DeleteDeduplication(List<string> tempList)
+        {
+            int k = 0;
+            while(tempList.Count != 1)
+            {
+                if (tempList.Contains("DELETE"))
+                {
+                    for (int i = 0; i < tempList.Count; i++)
+                    {
+                        if (!tempList[i].Contains("DELETE"))
+                        {
+                            tempList.RemoveAt(i);
+                        }
+                        else
+                        {
+                            k++;
+                        }
+
+                    }
+                }
+                else
+                    tempList.RemoveRange(0, tempList.Count - 1);
+
+                if (k>1)
+                {
+                    tempList.RemoveRange(0, tempList.Count - 1);
+                }
+            }
+            return tempList;
+        }
+
+        public static List<string> RemoveNullItems(List<string> finalList)
+        {
+            while (finalList.Contains("NULL"))
+            {
+                finalList.Remove("NULL");
+            }
+            return finalList;
+        }
+
 
     }
 }

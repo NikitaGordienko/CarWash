@@ -41,34 +41,6 @@ namespace CarWash_WPF
 
         private void ReportFormWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            DGClientsByDate.CanUserResizeColumns = false;
-            DGClientsByDate.IsReadOnly = true;
-            //DGClientsByDate.Columns[0].Header = "Номер клиента";
-            //DGClientsByDate.Columns[1].Header = "Имя";
-            //DGClientsByDate.Columns[2].Header = "Номер телефона";
-            //DGClientsByDate.Columns[3].Header = "Email";
-            //DGClientsByDate.Columns[4].Header = "Комментарий о клиенте";
-
-
-            DGAppointmentsByDateAndPrice.CanUserResizeColumns = false;
-            DGAppointmentsByDateAndPrice.IsReadOnly = true;
-            //DGAppointments.Columns[0].Header = "Номер записи";
-            //DGAppointments.Columns[1].Header = "Номер клиента";
-            //DGAppointments.Columns[2].Header = "Время";
-            //DGAppointments.Columns[3].Header = "Дата";
-            //DGAppointments.Columns[4].Header = "Номер бокса";
-            //DGAppointments.Columns[5].Header = "Класс автомобиля";
-            //DGAppointments.Columns[6].Header = "Химчистка салона";
-            //DGAppointments.Columns[7].Header = "Диагностика";
-            //DGAppointments.Columns[8].Header = "Цена";
-
-            DGFeedbackByRate.CanUserResizeColumns = false;
-            DGFeedbackByRate.IsReadOnly = true;
-            //DGFeedback.Columns[0].Header = "Номер записи";
-            //DGFeedback.Columns[1].Header = "Оценка";
-            //DGFeedback.Columns[2].Header = "Комментарий";
-
-
             ClientsByRegDateDT = DS.Tables[0];
             AppointmentsByDateAndPriceDT = DS.Tables[1];
             FeedbackByRateDT = DS.Tables[2];
@@ -85,8 +57,8 @@ namespace CarWash_WPF
             PriceBox.IsEnabled = false;
             SignForPriceSort.IsEnabled = false;
 
-            SignForRateSort.SelectedIndex = 0; //
-            SignForRateSort.SelectedIndex = 0; //
+            //SignForRateSort.SelectedIndex = 0; 
+            //SignForRateSort.SelectedIndex = 0; 
 
         }
 
@@ -104,7 +76,7 @@ namespace CarWash_WPF
                 string endDate = Database.ChangeDateToDatabaseFormat(datePickerForClientsTo.SelectedDate.ToString());
 
                 // Создание запроса
-                string showClientsByRegDateQuery = $@"SELECT * FROM client WHERE CLIENT_ID IN (SELECT CLIENT_ID FROM account WHERE REGISTRATION_DATE BETWEEN ""{startDate}"" AND ""{endDate}"")";
+                string showClientsByRegDateQuery = string.Format("SELECT * FROM client WHERE CLIENT_ID IN (SELECT CLIENT_ID FROM account WHERE REGISTRATION_DATE BETWEEN '{0}' AND '{1}')",startDate,endDate);
 
                 // Заполнение элемента DataTable на основе запроса
                 DataTable ClientsByRegDateDT = Database.CreateDataTable(showClientsByRegDateQuery);
@@ -144,7 +116,7 @@ namespace CarWash_WPF
                     string price = PriceBox.Text;
                     if (int.Parse(PriceBox.Text.ToString()) < 0) 
                         throw new Exception("Недопустимая цена");
-                    showAppointmentsByDateAndPriceQuery = $@"SELECT * FROM appointment WHERE APPOINTMENT_DATE BETWEEN ""{startDate}"" AND ""{endDate}"" AND PRICE {sign} {price}";
+                    showAppointmentsByDateAndPriceQuery = string.Format("SELECT * FROM appointment WHERE APPOINTMENT_DATE BETWEEN '{0}' AND '{1}' AND PRICE {2} {3}",startDate,endDate,sign,price);
                 }
                 else if (cbTurnOnDateSort.IsChecked == true & cbTurnOnPriceSort.IsChecked == false)
                 {
@@ -153,7 +125,7 @@ namespace CarWash_WPF
                         throw new Exception("Выбран некорректный промежуток дат");
                     string startDate = Database.ChangeDateToDatabaseFormat(datePickerAppointmentsFrom.ToString());
                     string endDate = Database.ChangeDateToDatabaseFormat(datePickerAppointmentsTo.ToString());
-                    showAppointmentsByDateAndPriceQuery = $@"SELECT * FROM appointment WHERE APPOINTMENT_DATE BETWEEN ""{startDate}"" AND ""{endDate}""";
+                    showAppointmentsByDateAndPriceQuery = string.Format("SELECT * FROM appointment WHERE APPOINTMENT_DATE BETWEEN '{0}' AND '{1}'",startDate,endDate);
                 }
                 else if (cbTurnOnDateSort.IsChecked == false & cbTurnOnPriceSort.IsChecked == true)
                 {
@@ -161,11 +133,11 @@ namespace CarWash_WPF
                     string price = PriceBox.Text;
                     if (int.Parse(PriceBox.Text.ToString()) < 0) //проверка введенной цены
                         throw new Exception("Недопустимая цена");
-                    showAppointmentsByDateAndPriceQuery = $@"SELECT * FROM appointment WHERE PRICE {sign} {price}";
+                    showAppointmentsByDateAndPriceQuery = string.Format("SELECT * FROM appointment WHERE PRICE {0} {1}",sign,price);
                 }
                 else if (cbTurnOnDateSort.IsChecked == false & cbTurnOnPriceSort.IsChecked == false)
                 {
-                    showAppointmentsByDateAndPriceQuery = $@"SELECT * FROM appointment";
+                    showAppointmentsByDateAndPriceQuery = "SELECT * FROM appointment";
                 }
 
                 // Заполнение элемента DataTable на основе запроса
@@ -190,7 +162,7 @@ namespace CarWash_WPF
                     throw new Exception("Недопустимое значение рейтинга");
 
                 string rating = RateBox.Text.ToString();
-                string showFeedBackByRateQuery = $@"SELECT * FROM review WHERE VALUE {sign} {rating}";
+                string showFeedBackByRateQuery = string.Format("SELECT * FROM review WHERE VALUE {0} {1}",sign,rating);
 
                 // Заполнение элемента DataTable на основе запроса
                 FeedbackByRateDT = Database.CreateDataTable(showFeedBackByRateQuery);
@@ -417,5 +389,34 @@ namespace CarWash_WPF
                 this.DragMove();
         }
 
+        private void DGClientsByDate_AutoGeneratedColumns(object sender, EventArgs e)
+        {
+            DGClientsByDate.Columns[0].Header = "Номер клиента";
+            DGClientsByDate.Columns[1].Header = "Имя";
+            DGClientsByDate.Columns[2].Header = "Номер телефона";
+            DGClientsByDate.Columns[3].Header = "Email";
+            DGClientsByDate.Columns[4].Header = "Комментарий о клиенте";
+        }
+
+        private void DGAppointmentsByDateAndPrice_AutoGeneratedColumns(object sender, EventArgs e)
+        {
+            DGAppointmentsByDateAndPrice.Columns[0].Header = "Номер записи";
+            DGAppointmentsByDateAndPrice.Columns[1].Header = "Номер клиента";
+            DGAppointmentsByDateAndPrice.Columns[2].Header = "Время";
+            DGAppointmentsByDateAndPrice.Columns[3].Header = "Дата";
+            DGAppointmentsByDateAndPrice.Columns[4].Header = "Номер бокса";
+            DGAppointmentsByDateAndPrice.Columns[5].Header = "Класс автомобиля";
+            DGAppointmentsByDateAndPrice.Columns[6].Header = "Химчистка салона";
+            DGAppointmentsByDateAndPrice.Columns[7].Header = "Диагностика";
+            DGAppointmentsByDateAndPrice.Columns[8].Header = "Цена";
+        }
+
+        private void DGFeedbackByRate_AutoGeneratedColumns(object sender, EventArgs e)
+        {
+            DGFeedbackByRate.Columns[0].Header = "Номер записи";
+            DGFeedbackByRate.Columns[1].Header = "Номер клиента";
+            DGFeedbackByRate.Columns[2].Header = "Оценка";
+            DGFeedbackByRate.Columns[3].Header = "Комментарий";
+        }
     }
 }
