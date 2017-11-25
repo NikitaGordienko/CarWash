@@ -151,8 +151,8 @@ namespace CarWash_WPF
                 if (cbTurnOnInterior.IsChecked == true)
                 {
                     if (cbInteriorCheck.IsChecked == true)
-                        queryPartInterior = $" AND DIAGNOSTICS = true";
-                    else queryPartInterior = $" AND DIAGNOSTICS = false";
+                        queryPartInterior = $" AND INTERIOR_CLEANING = true";
+                    else queryPartInterior = $" AND INTERIOR_CLEANING = false";
                 }
                 else queryPartInterior = "";
 
@@ -173,7 +173,7 @@ namespace CarWash_WPF
 
                 if (cbTurnOnClass.IsChecked == true)
                 {
-                    int res
+                    int res;
                     string carClass = ClassBox.Text;
                     bool isNumeric = int.TryParse(carClass, out res);
                     if (res != 0) throw new Exception("Класс автомобиля не может быть числом!");
@@ -202,7 +202,7 @@ namespace CarWash_WPF
                 int res;
                 string sign = SignForRateSort.SelectedItem.ToString();
                 bool isNumeric = int.TryParse(sign, out res);
-                if (res == 0)
+                if (res != 0)
                     throw new Exception("Поле \"Рейтинг\" должно быть числовым!");
                 if (!(int.Parse(RateBox.Text.ToString()) >= 1 & int.Parse(RateBox.Text.ToString()) <= 5))
                     throw new Exception("Недопустимое значение рейтинга");
