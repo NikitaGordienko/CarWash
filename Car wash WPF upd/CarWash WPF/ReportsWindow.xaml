@@ -19,35 +19,58 @@
                 <Grid x:Name="ClientsRepPage">
                     <Label Content="с" HorizontalAlignment="Left" Margin="10,53,0,0" VerticalAlignment="Top" FontFamily="Microsoft JhengHei Light" FontSize="16"/>
                     <Label Content="по" HorizontalAlignment="Left" Margin="151,53,0,0" VerticalAlignment="Top" FontFamily="Microsoft JhengHei Light" FontSize="16"/>
-                    <Button x:Name="ShowClientByRegDate" Content="Отобразить" HorizontalAlignment="Left" Margin="313,54,0,0" VerticalAlignment="Top" Width="110" Background="#FF007ACC" Foreground="White" Height="30" FontFamily="Microsoft JhengHei Light" FontSize="15" BorderThickness="0" Click="ShowClientByRegDate_Click"/>
+                    <Button x:Name="ShowClientByRegDate" Content="Отобразить" HorizontalAlignment="Left" Margin="332,56,0,0" VerticalAlignment="Top" Width="124" Background="#FF007ACC" Foreground="White" Height="30" FontFamily="Microsoft JhengHei Light" FontSize="15" BorderThickness="0" Click="ShowClientByRegDate_Click"/>
                     <DatePicker x:Name="datePickerForClientsFrom" HorizontalAlignment="Left" Margin="39,58,0,0" VerticalAlignment="Top"/>
                     <DatePicker x:Name="datePickerForClientsTo" HorizontalAlignment="Left" Margin="193,58,0,0" VerticalAlignment="Top"/>
                     <DataGrid x:Name="DGClientsByDate" HorizontalAlignment="Left" Height="401" Margin="10,110,0,0" VerticalAlignment="Top" Width="774" Background="White"/>
-                    <Button x:Name="FormClientsExcelReport" Content="Отчет в Excel" HorizontalAlignment="Left" Margin="507,47,0,0" VerticalAlignment="Top" Width="135" Background="#FF007ACC" Foreground="White" BorderThickness="0" Height="45" FontSize="15" FontFamily="Microsoft JhengHei Light" Click="FormClientsExcelReport_Click"/>
+                    <Button x:Name="FormClientsExcelReport" Content="Отчет в Excel" HorizontalAlignment="Left" Margin="494,49,0,0" VerticalAlignment="Top" Width="124" Background="#FF007ACC" Foreground="White" BorderThickness="0" Height="45" FontSize="15" FontFamily="Microsoft JhengHei Light" Click="FormClientsExcelReport_Click"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Отчеты по записям" Background="White">
                 <Grid x:Name="AppointmentsRepPage">
-                    <DataGrid x:Name="DGAppointmentsByDateAndPrice" HorizontalAlignment="Left" Height="401" Margin="10,110,0,0" VerticalAlignment="Top" Width="774" Background="White"/>
-                    <CheckBox x:Name="cbTurnOnDateSort" Content="" HorizontalAlignment="Left" Margin="10,21,0,0" VerticalAlignment="Top" Checked="cbTurnOnDateSort_Checked" Unchecked="cbTurnOnDateSort_Unchecked"/>
-                    <DatePicker x:Name="datePickerAppointmentsFrom" HorizontalAlignment="Left" Margin="59,16,0,0" VerticalAlignment="Top"/>
-                    <DatePicker x:Name="datePickerAppointmentsTo" HorizontalAlignment="Left" Margin="193,16,0,0" VerticalAlignment="Top"/>
-                    <CheckBox x:Name="cbTurnOnPriceSort" Content="" HorizontalAlignment="Left" Margin="10,60,0,0" VerticalAlignment="Top" Checked="cbTurnOnPriceSort_Checked" Unchecked="cbTurnOnPriceSort_Unchecked"/>
-                    <Label Content="с" HorizontalAlignment="Left" Margin="35,14,0,0" VerticalAlignment="Top"/>
-                    <Label Content="по" HorizontalAlignment="Left" Margin="164,14,0,0" VerticalAlignment="Top"/>
-                    <ComboBox x:Name="SignForPriceSort" HorizontalAlignment="Left" Margin="110,58,0,0" VerticalAlignment="Top" Width="49"/>
-                    <Label Content="Цена" HorizontalAlignment="Left" Margin="59,54,0,0" VerticalAlignment="Top"/>
-                    <Button x:Name="ShowAppointmentsByDateAndPrice" Content="Отобразить" HorizontalAlignment="Left" Margin="314,34,0,0" VerticalAlignment="Top" Width="111" Background="#FF007ACC" Foreground="White" BorderThickness="0" Height="29" FontSize="15" FontFamily="Microsoft JhengHei Light" Click="ShowAppointmentsByDateAndPrice_Click"/>
-                    <TextBox x:Name="PriceBox" HorizontalAlignment="Left" Height="22" Margin="193,58,0,0" TextWrapping="NoWrap" Text="" VerticalAlignment="Top" Width="75" VerticalContentAlignment="Center"/>
-                    <Button x:Name="FormAppointmentsExcelReport" Content="Отчет в Excel" HorizontalAlignment="Left" Margin="541,26,0,0" VerticalAlignment="Top" Width="135" Background="#FF007ACC" Foreground="White" BorderThickness="0" Height="45" FontSize="15" FontFamily="Microsoft JhengHei Light" Click="FormAppointmentsExcelReport_Click"/>
+                    <DataGrid x:Name="DGAppointmentsByDateAndPrice" HorizontalAlignment="Left" Height="401" Margin="10,110,0,0" VerticalAlignment="Top" Width="774" Background="White" FontFamily="Microsoft JhengHei Light" FontSize="14"/>
+                    <CheckBox x:Name="cbTurnOnDateSort" Content="" HorizontalAlignment="Left" Margin="10,23,0,0" VerticalAlignment="Top" Checked="cbTurnOnDateSort_Checked" Unchecked="cbTurnOnDateSort_Unchecked"/>
+                    <DatePicker x:Name="datePickerAppointmentsFrom" HorizontalAlignment="Left" Margin="47,16,0,0" VerticalAlignment="Top" FontFamily="Microsoft JhengHei Light" FontSize="14" BorderThickness="1"/>
+                    <DatePicker x:Name="datePickerAppointmentsTo" HorizontalAlignment="Left" Margin="187,16,0,0" VerticalAlignment="Top" FontFamily="Microsoft JhengHei Light" FontSize="14"/>
+                    <CheckBox x:Name="cbTurnOnPriceSort" Content="" HorizontalAlignment="Left" Margin="10,66,0,0" VerticalAlignment="Top" Checked="cbTurnOnPriceSort_Checked" Unchecked="cbTurnOnPriceSort_Unchecked"/>
+                    <Label Content="с" HorizontalAlignment="Left" Margin="27,14,0,0" VerticalAlignment="Top" FontSize="14" FontFamily="Microsoft JhengHei Light"/>
+                    <Label Content="по" HorizontalAlignment="Left" Margin="160,15,0,0" VerticalAlignment="Top" FontSize="14" FontFamily="Microsoft JhengHei Light"/>
+                    <ComboBox x:Name="SignForPriceSort" HorizontalAlignment="Left" Margin="90,61,0,0" VerticalAlignment="Top" Width="49" FontFamily="Microsoft JhengHei Light" FontSize="14"/>
+                    <Label Content="Цена" HorizontalAlignment="Left" Margin="41,58,0,0" VerticalAlignment="Top" FontSize="14" FontFamily="Microsoft JhengHei Light"/>
+                    <Button x:Name="ShowAppointmentsByDateAndPrice" Content="Отобразить" HorizontalAlignment="Left" Margin="679,14,0,0" VerticalAlignment="Top" Width="105" Background="#FF007ACC" Foreground="White" BorderThickness="0" Height="29" FontSize="15" FontFamily="Microsoft JhengHei Light" Click="ShowAppointmentsByDateAndPrice_Click"/>
+                    <TextBox x:Name="PriceBox" HorizontalAlignment="Left" Height="25" Margin="156,61,0,0" TextWrapping="NoWrap" Text="" VerticalAlignment="Top" Width="80" VerticalContentAlignment="Center" FontFamily="Microsoft JhengHei Light" FontSize="14" MaxLength="4"/>
+                    <Button x:Name="FormAppointmentsExcelReport" Content="Отчет в Excel" HorizontalAlignment="Left" Margin="679,54,0,0" VerticalAlignment="Top" Width="105" Background="#FF007ACC" Foreground="White" BorderThickness="0" Height="40" FontSize="15" FontFamily="Microsoft JhengHei Light" Click="FormAppointmentsExcelReport_Click"/>
+                    <Label Content="Диагностика" HorizontalAlignment="Left" Margin="330,15,0,0" VerticalAlignment="Top" FontSize="14" FontFamily="Microsoft JhengHei Light"/>
+                    <Label Content="Чистка интерьера" HorizontalAlignment="Left" Margin="330,58,0,0" VerticalAlignment="Top" FontFamily="Microsoft JhengHei Light" FontSize="14"/>
+                    <CheckBox x:Name="cbDiagnosticsCheck" Content="" HorizontalAlignment="Left" Margin="458,16,0,0" VerticalAlignment="Top" Width="16">
+                        <CheckBox.LayoutTransform>
+                            <ScaleTransform ScaleX="2" ScaleY="2" />
+                        </CheckBox.LayoutTransform>
+                    </CheckBox>
+                    <CheckBox x:Name="cbTurnOnInterior" Content="" HorizontalAlignment="Left" Margin="314,66,0,0" VerticalAlignment="Top" Checked="cbTurnOnInterior_Checked" Unchecked="cbTurnOnInterior_Unchecked"/>
+                    <CheckBox x:Name="cbInteriorCheck" Content="" HorizontalAlignment="Left" Margin="458,58,0,0" VerticalAlignment="Top" Width="16">
+                        <CheckBox.LayoutTransform>
+                            <ScaleTransform ScaleX="2" ScaleY="2" />
+                        </CheckBox.LayoutTransform>
+                    </CheckBox>
+                    <CheckBox x:Name="cbTurnOnDiagnostics" Content="" HorizontalAlignment="Left" Margin="314,23,0,0" VerticalAlignment="Top" Checked="cbTurnOnDiagnostics_Checked" Unchecked="cbTurnOnDiagnostics_Unchecked"/>
+                    <Rectangle Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="98" Margin="307,5,0,0" Stroke="Black" VerticalAlignment="Top" Width="1" Opacity="0.2"/>
+                    <Rectangle Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="98" Margin="496,5,0,0" Stroke="Black" VerticalAlignment="Top" Width="1" Opacity="0.2"/>
+                    <Label Content="Номер бокса" HorizontalAlignment="Left" Margin="520,15,0,0" VerticalAlignment="Top" FontSize="14" FontFamily="Microsoft JhengHei Light"/>
+                    <Label Content="Класс машины" HorizontalAlignment="Left" Margin="520,58,0,0" VerticalAlignment="Top" FontFamily="Microsoft JhengHei Light" FontSize="14"/>
+                    <CheckBox x:Name="cbTurnOnClass" Content="" HorizontalAlignment="Left" Margin="504,66,0,0" VerticalAlignment="Top" Checked="cbTurnOnClass_Checked" Unchecked="cbTurnOnClass_Unchecked"/>
+                    <CheckBox x:Name="cbTurnOnBox" Content="" HorizontalAlignment="Left" Margin="504,23,0,0" VerticalAlignment="Top" Checked="cbTurnOnBox_Checked" Unchecked="cbTurnOnBox_Unchecked"/>
+                    <TextBox x:Name="BoxBox" HorizontalAlignment="Left" Height="24" Margin="630,19,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="30" FontSize="14" FontFamily="Microsoft JhengHei Light" MaxLength="1" VerticalContentAlignment="Center"/>
+                    <TextBox x:Name="ClassBox" HorizontalAlignment="Left" Height="24" Margin="630,62,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="30" FontSize="14" FontFamily="Microsoft JhengHei Light" MaxLength="1" VerticalContentAlignment="Center"/>
+                    <Rectangle Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="98" Margin="669,5,0,0" Stroke="Black" VerticalAlignment="Top" Width="1" Opacity="0.2"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Отчеты по отзывам" Background="White">
                 <Grid x:Name="FeedbackRepPage">
                     <DataGrid x:Name="DGFeedbackByRate" HorizontalAlignment="Left" Height="401" Margin="10,110,0,0" VerticalAlignment="Top" Width="774" Background="White"/>
-                    <Label Content="Оценка" HorizontalAlignment="Left" Margin="10,61,0,0" VerticalAlignment="Top"/>
-                    <ComboBox x:Name="SignForRateSort" HorizontalAlignment="Left" Margin="77,64,0,0" VerticalAlignment="Top" Width="43"/>
-                    <TextBox x:Name="RateBox" HorizontalAlignment="Left" Height="22" Margin="136,64,0,0" TextWrapping="NoWrap" Text="" VerticalAlignment="Top" Width="63" VerticalContentAlignment="Center"/>
+                    <Label Content="Оценка" HorizontalAlignment="Left" Margin="10,61,0,0" VerticalAlignment="Top" FontFamily="Microsoft JhengHei Light" FontSize="14"/>
+                    <ComboBox x:Name="SignForRateSort" HorizontalAlignment="Left" Margin="77,64,0,0" VerticalAlignment="Top" Width="43" Height="26"/>
+                    <TextBox x:Name="RateBox" HorizontalAlignment="Left" Height="26" Margin="136,64,0,0" TextWrapping="NoWrap" Text="" VerticalAlignment="Top" Width="29" VerticalContentAlignment="Center" MaxLength="1" FontFamily="Microsoft JhengHei Light" FontSize="14"/>
                     <Button x:Name="ShowFeedBackByRate" Content="Отобразить" HorizontalAlignment="Left" Margin="228,61,0,0" VerticalAlignment="Top" Width="111" Background="#FF007ACC" Foreground="White" BorderThickness="0" Height="29" FontSize="15" FontFamily="Microsoft JhengHei Light" Click="ShowFeedBackByRate_Click" />
                     <Button x:Name="FormFeedbackExcelReport" Content="Отчет в Excel" HorizontalAlignment="Left" Margin="398,53,0,0" VerticalAlignment="Top" Width="135" Background="#FF007ACC" Foreground="White" BorderThickness="0" Height="45" FontSize="15" FontFamily="Microsoft JhengHei Light" Click="FormFeedbackExcelReport_Click"/>
                 </Grid>

@@ -26,9 +26,7 @@ namespace CarWash_WPF
         DataTable ClientsByRegDateDT;
         DataTable AppointmentsByDateAndPriceDT;
         DataTable FeedbackByRateDT;
-
         List<string> collection = new List<string> { ">=", "=", "<=" };
-
 
         private static Excel.Application objApp;
         private static Excel._Workbook objBook;
@@ -43,31 +41,10 @@ namespace CarWash_WPF
         {
             DGClientsByDate.CanUserResizeColumns = false;
             DGClientsByDate.IsReadOnly = true;
-            //DGClientsByDate.Columns[0].Header = "Номер клиента";
-            //DGClientsByDate.Columns[1].Header = "Имя";
-            //DGClientsByDate.Columns[2].Header = "Номер телефона";
-            //DGClientsByDate.Columns[3].Header = "Email";
-            //DGClientsByDate.Columns[4].Header = "Комментарий о клиенте";
-
-
             DGAppointmentsByDateAndPrice.CanUserResizeColumns = false;
             DGAppointmentsByDateAndPrice.IsReadOnly = true;
-            //DGAppointments.Columns[0].Header = "Номер записи";
-            //DGAppointments.Columns[1].Header = "Номер клиента";
-            //DGAppointments.Columns[2].Header = "Время";
-            //DGAppointments.Columns[3].Header = "Дата";
-            //DGAppointments.Columns[4].Header = "Номер бокса";
-            //DGAppointments.Columns[5].Header = "Класс автомобиля";
-            //DGAppointments.Columns[6].Header = "Химчистка салона";
-            //DGAppointments.Columns[7].Header = "Диагностика";
-            //DGAppointments.Columns[8].Header = "Цена";
-
             DGFeedbackByRate.CanUserResizeColumns = false;
             DGFeedbackByRate.IsReadOnly = true;
-            //DGFeedback.Columns[0].Header = "Номер записи";
-            //DGFeedback.Columns[1].Header = "Оценка";
-            //DGFeedback.Columns[2].Header = "Комментарий";
-
 
             ClientsByRegDateDT = DS.Tables[0];
             AppointmentsByDateAndPriceDT = DS.Tables[1];
@@ -82,11 +59,12 @@ namespace CarWash_WPF
 
             datePickerAppointmentsFrom.IsEnabled = false;
             datePickerAppointmentsTo.IsEnabled = false;
-            PriceBox.IsEnabled = false;
             SignForPriceSort.IsEnabled = false;
-
-            SignForRateSort.SelectedIndex = 0; //
-            SignForRateSort.SelectedIndex = 0; //
+            PriceBox.IsEnabled = false;
+            cbDiagnosticsCheck.IsEnabled = false;
+            cbInteriorCheck.IsEnabled = false;
+            BoxBox.IsEnabled = false;
+            ClassBox.IsEnabled = false;
 
         }
 
@@ -127,50 +105,83 @@ namespace CarWash_WPF
             try
             {
                 // Переменные для формирования запроса
-                string showAppointmentsByDateAndPriceQuery = "";               
+                string appointmentFullQuery = "SELECT * FROM APPOINTMENT WHERE 1";
+                string queryPartDate;
+                string queryPartPrice;
+                string queryPartDiagnostics;
+                string queryPartInterior;
+                string queryPartBox;
+                string queryPartClass;
 
-
-                // Определения формата запроса (дата,цена)\(дата)\(цена)\(отсутствует)
-                if (cbTurnOnDateSort.IsChecked == true & cbTurnOnPriceSort.IsChecked == true)
+                if (cbTurnOnDateSort.IsChecked == true)
                 {
-                    // Проверка корректности выбранного промежутка дат и Преобразование дат к формату MySQL(гггг-мм-дд) с помощью метода в классе Database
+                    //Проверка корректности выбранного промежутка дат и Преобразование дат к формату MySQL(гггг - мм - дд) с помощью метода в классе Database
                     if (datePickerAppointmentsFrom.SelectedDate > datePickerAppointmentsTo.SelectedDate)
-                        throw new Exception("Выбран некорректный промежуток дат");
+                        throw new Exception("Выбран некорректный промежуток дат!");
                     string startDate = Database.ChangeDateToDatabaseFormat(datePickerAppointmentsFrom.ToString());
                     string endDate = Database.ChangeDateToDatabaseFormat(datePickerAppointmentsTo.ToString());
+                    queryPartDate = $" AND APPOINTMENT_DATE BETWEEN '{startDate}' AND '{endDate}'";
+                }
+                else queryPartDate = ""; // или определить сверху
 
-                    //Проверка правильности ввода цены
-                    string sign = SignForPriceSort.SelectedItem.ToString(); //SelectedItem
+                if (cbTurnOnPriceSort.IsChecked == true)
+                {
+                    string sign = SignForPriceSort.SelectedItem.ToString();
                     string price = PriceBox.Text;
-                    if (int.Parse(PriceBox.Text.ToString()) < 0) 
+                    if (string.IsNullOrEmpty(price))
+                        throw new Exception(@"Поле ""Цена"" не заполнено!");
+                    bool isNumeric = int.TryParse(price, out int res);
+                    if (res == 0)
+                        throw new Exception(@"Поле ""Цена"" должно быть числовым!"); 
+                    if (int.Parse(PriceBox.Text.ToString()) <= 0) 
                         throw new Exception("Недопустимая цена");
-                    showAppointmentsByDateAndPriceQuery = $@"SELECT * FROM appointment WHERE APPOINTMENT_DATE BETWEEN ""{startDate}"" AND ""{endDate}"" AND PRICE {sign} {price}";
+                    queryPartPrice = $" AND PRICE {sign} {price}";
                 }
-                else if (cbTurnOnDateSort.IsChecked == true & cbTurnOnPriceSort.IsChecked == false)
-                {
-                    // Проверка корректности выбранного промежутка дат и Преобразование дат к формату MySQL(гггг-мм-дд) с помощью метода в классе Database
-                    if (datePickerAppointmentsFrom.SelectedDate > datePickerAppointmentsTo.SelectedDate)
-                        throw new Exception("Выбран некорректный промежуток дат");
-                    string startDate = Database.ChangeDateToDatabaseFormat(datePickerAppointmentsFrom.ToString());
-                    string endDate = Database.ChangeDateToDatabaseFormat(datePickerAppointmentsTo.ToString());
-                    showAppointmentsByDateAndPriceQuery = $@"SELECT * FROM appointment WHERE APPOINTMENT_DATE BETWEEN ""{startDate}"" AND ""{endDate}""";
-                }
-                else if (cbTurnOnDateSort.IsChecked == false & cbTurnOnPriceSort.IsChecked == true)
-                {
-                    string sign = SignForPriceSort.SelectedItem.ToString(); //SelectedItem
-                    string price = PriceBox.Text;
-                    if (int.Parse(PriceBox.Text.ToString()) < 0) //проверка введенной цены
-                        throw new Exception("Недопустимая цена");
-                    showAppointmentsByDateAndPriceQuery = $@"SELECT * FROM appointment WHERE PRICE {sign} {price}";
-                }
-                else if (cbTurnOnDateSort.IsChecked == false & cbTurnOnPriceSort.IsChecked == false)
-                {
-                    showAppointmentsByDateAndPriceQuery = $@"SELECT * FROM appointment";
-                }
+                else queryPartPrice = ""; 
 
+                if (cbTurnOnDiagnostics.IsChecked == true)
+                {
+                    if (cbDiagnosticsCheck.IsChecked == true)
+                        queryPartDiagnostics = $" AND DIAGNOSTICS = true";
+                    else queryPartDiagnostics = $" AND DIAGNOSTICS = false";
+                }
+                else queryPartDiagnostics = "";
+
+                if (cbTurnOnInterior.IsChecked == true)
+                {
+                    if (cbInteriorCheck.IsChecked == true)
+                        queryPartInterior = $" AND DIAGNOSTICS = true";
+                    else queryPartInterior = $" AND DIAGNOSTICS = false";
+                }
+                else queryPartInterior = "";
+
+                if (cbTurnOnBox.IsChecked == true)
+                {
+                    string box = BoxBox.Text;
+                    if (string.IsNullOrEmpty(box))
+                        throw new Exception("Поле \"Номер бокса\" не заполнено!");
+                    bool isNumeric = int.TryParse(box, out int res);
+                    if (res == 0)
+                        throw new Exception("Поле \"Номер бокса\" должно быть числовым!"); // если ввести 0, тоже ошибка 
+                    if (int.Parse(BoxBox.Text.ToString()) <= 0)
+                        throw new Exception("Неверный номер бокса");
+                    queryPartBox = $" AND BOX_NUMBER = {box}";
+                }
+                else queryPartBox = "";
+
+                if (cbTurnOnClass.IsChecked == true)
+                {
+                    string carClass = ClassBox.Text;
+                    bool isNumeric = int.TryParse(carClass, out int res);
+                    if (res != 0) throw new Exception("Класс автомобиля не может быть числом!");
+                    queryPartClass = $" AND CAR_TYPE = '{carClass}'";
+                }
+                else queryPartClass = "";
+
+                // Построение итогового запроса
+                appointmentFullQuery += queryPartDate + queryPartPrice + queryPartDiagnostics + queryPartInterior + queryPartBox + queryPartClass;
                 // Заполнение элемента DataTable на основе запроса
-                AppointmentsByDateAndPriceDT = Database.CreateDataTable(showAppointmentsByDateAndPriceQuery);
-
+                AppointmentsByDateAndPriceDT = Database.CreateDataTable(appointmentFullQuery);
                 // Элемент DG переопределяется в соответствии с новым источником
                 DGAppointmentsByDateAndPrice.ItemsSource = AppointmentsByDateAndPriceDT.DefaultView;
             }
@@ -186,6 +197,9 @@ namespace CarWash_WPF
             {
                 // Переменные для формирования запроса
                 string sign = SignForRateSort.SelectedItem.ToString();
+                bool isNumeric = int.TryParse(sign, out int res);
+                if (res == 0)
+                    throw new Exception("Поле \"Рейтинг\" должно быть числовым!");
                 if (!(int.Parse(RateBox.Text.ToString()) >= 1 & int.Parse(RateBox.Text.ToString()) <= 5))
                     throw new Exception("Недопустимое значение рейтинга");
 
@@ -211,22 +225,62 @@ namespace CarWash_WPF
             datePickerAppointmentsTo.IsEnabled = true;
         }
 
-        private void cbTurnOnPriceSort_Checked(object sender, RoutedEventArgs e)
-        {
-            PriceBox.IsEnabled = true;
-            SignForPriceSort.IsEnabled = true;
-        }
-
         private void cbTurnOnDateSort_Unchecked(object sender, RoutedEventArgs e)
         {
             datePickerAppointmentsFrom.IsEnabled = false;
             datePickerAppointmentsTo.IsEnabled = false;
         }
 
+        private void cbTurnOnPriceSort_Checked(object sender, RoutedEventArgs e)
+        {
+            PriceBox.IsEnabled = true;
+            SignForPriceSort.IsEnabled = true;
+        }
+
         private void cbTurnOnPriceSort_Unchecked(object sender, RoutedEventArgs e)
         {
             PriceBox.IsEnabled = false;
             SignForPriceSort.IsEnabled = false;
+        }
+
+        private void cbTurnOnDiagnostics_Checked(object sender, RoutedEventArgs e)
+        {
+            cbDiagnosticsCheck.IsEnabled = true;
+        }
+
+        private void cbTurnOnDiagnostics_Unchecked(object sender, RoutedEventArgs e)
+        {
+            cbDiagnosticsCheck.IsEnabled = false;
+        }
+
+        private void cbTurnOnInterior_Checked(object sender, RoutedEventArgs e)
+        {
+            cbInteriorCheck.IsEnabled = true;
+        }
+
+        private void cbTurnOnInterior_Unchecked(object sender, RoutedEventArgs e)
+        {
+            cbInteriorCheck.IsEnabled = false;
+        }
+
+        private void cbTurnOnBox_Checked(object sender, RoutedEventArgs e)
+        {
+            BoxBox.IsEnabled = true;
+        }
+
+        private void cbTurnOnBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            BoxBox.IsEnabled = false;
+        }
+
+        private void cbTurnOnClass_Checked(object sender, RoutedEventArgs e)
+        {
+            ClassBox.IsEnabled = true;       
+        }
+
+        private void cbTurnOnClass_Unchecked(object sender, RoutedEventArgs e)
+        {
+            ClassBox.IsEnabled = false;
         }
 
 
@@ -417,5 +471,6 @@ namespace CarWash_WPF
                 this.DragMove();
         }
 
+        
     }
 }
