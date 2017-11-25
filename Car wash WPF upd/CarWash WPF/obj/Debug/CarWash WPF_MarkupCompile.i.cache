@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-D:\GitHub\Projects\CarWash\Car wash WPF upd\CarWash WPF\obj\Debug\
+D:\GitHub\Projects\CarWashCloned\Car wash WPF upd\CarWash WPF\obj\Debug\
 CarWash_WPF
 none
 false
 DEBUG;TRACE
-D:\GitHub\Projects\CarWash\Car wash WPF upd\CarWash WPF\App.xaml
+D:\GitHub\Projects\CarWashCloned\Car wash WPF upd\CarWash WPF\App.xaml
 4-619837460
 
 1328738923
 161968193359
 LoginPage.xaml;MainWindow.xaml;ReportsWindow.xaml;SignUp.xaml;
 
-True
+False
 
