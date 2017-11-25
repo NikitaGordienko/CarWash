@@ -216,14 +216,14 @@ namespace CarWash_WPF
 
         private void FormAppointmentsExcelReport_Click(object sender, RoutedEventArgs e)
         {
-            double max, min, avg;
+            double max, min, avg,sum;
             this.IsEnabled = false;
             object[][] reportArray = CreateArrayFromDataTable(AppointmentsByDateAndPriceDT);
             object[][] headingArray = CreateHeadingArrayFromDataTable(AppointmentsByDateAndPriceDT);
             object[,] reportArray2D = CreateTwoDimensionalArrayFromStepArray(reportArray);
             reportArray2D = ChangeStructure(reportArray2D);
-            FindMaxMinAvgPrice(reportArray2D, out max, out min, out avg);
-            object[] totalsArray = new object[] { "MAX:", max.ToString(), "MIN:", min.ToString(), "AVG:", avg.ToString() };
+            FindMaxMinAvgSumPrice(reportArray2D, out max, out min, out avg,out sum);
+            object[,] totalsArray = new object[,] { { "SUM:", sum.ToString() }, { "MAX:", max.ToString() }, { "MIN:", min.ToString() }, { "AVG:", avg.ToString("#.##") } };
             object[,] headingArray2D = CreateTwoDimensionalArrayFromStepArray(headingArray);
             CreateExcelReport(headingArray2D, reportArray2D,totalsArray);
             this.IsEnabled = true;
@@ -321,7 +321,7 @@ namespace CarWash_WPF
             objApp.UserControl = true;
         }
 
-        private void CreateExcelReport(object[,] headingArray, object[,] reportArray, object[] totalsArray)
+        private void CreateExcelReport(object[,] headingArray, object[,] reportArray, object[,] totalsArray)
         {
             Excel.Range range;
             Excel.Workbooks objBooks;
@@ -342,23 +342,24 @@ namespace CarWash_WPF
             range = range.get_Resize(reportArray.GetLength(0), reportArray.GetLength(1));
             range.set_Value(Missing.Value, reportArray);
 
-            range = objSheet.get_Range("A"+ (reportArray.GetLength(0) + 2).ToString(), Missing.Value);
-            range = range.get_Resize(totalsArray.GetLength(0));
+            range = objSheet.get_Range("H"+ (reportArray.GetLength(0) + 3).ToString(), Missing.Value);
+            range = range.get_Resize(totalsArray.GetLength(0), totalsArray.GetLength(1));
             range.set_Value(Missing.Value, totalsArray);
 
             objApp.Visible = true;
             objApp.UserControl = true;
         }
 
-        private void FindMaxMinAvgPrice(object[,] reportArray, out double max, out double min, out double avg)
+        private void FindMaxMinAvgSumPrice(object[,] reportArray, out double max, out double min, out double avg, out double sum)
         {
             max = double.MinValue;
             min = double.MaxValue;
-            avg = 0;
+            sum = 0;
+            double price;
 
             for (int i = 0; i < reportArray.GetLength(0); i++)
             {
-                double price = double.Parse(reportArray[i, 8].ToString());
+                price = double.Parse(reportArray[i, 8].ToString());
                 if (price > max)
                 {
                     max = price;
@@ -368,10 +369,10 @@ namespace CarWash_WPF
                 {
                     min = price;
                 }
-                avg += price;
+                sum += price;
             }
 
-            avg = avg / reportArray.GetLength(0);          
+            avg = sum / reportArray.GetLength(0);          
         }
 
         private void btnMinimize_Click(object sender, RoutedEventArgs e)
