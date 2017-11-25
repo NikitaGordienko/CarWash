@@ -76,6 +76,8 @@ namespace CarWash_WPF
                 // Проверка корректности выбранного промежутка дат
                 if (datePickerForClientsFrom.SelectedDate > datePickerForClientsTo.SelectedDate)
                     throw new Exception("Выбран некорректный промежуток дат");
+                if (datePickerForClientsFrom.SelectedDate.HasValue == false || datePickerForClientsTo.SelectedDate.HasValue == false)
+                    throw new Exception("Вы не выбрали дату");
 
                 // Преобразование дат к формату MySQL(гггг-мм-дд) с помощью метода в классе Database
                 string startDate = Database.ChangeDateToDatabaseFormat(datePickerForClientsFrom.SelectedDate.ToString());
@@ -85,9 +87,7 @@ namespace CarWash_WPF
                 string showClientsByRegDateQuery = $@"SELECT * FROM client WHERE CLIENT_ID IN (SELECT CLIENT_ID FROM account WHERE REGISTRATION_DATE BETWEEN ""{startDate}"" AND ""{endDate}"")";
 
                 // Заполнение элемента DataTable на основе запроса
-                DataTable ClientsByRegDateDT = Database.CreateDataTable(showClientsByRegDateQuery);
-
-                DS.Tables.Add(ClientsByRegDateDT);
+                ClientsByRegDateDT = Database.CreateDataTable(showClientsByRegDateQuery);
 
                 // Элемент DGV переопределяется в соответствии с новым источником
                 DGClientsByDate.ItemsSource = ClientsByRegDateDT.DefaultView;
@@ -118,6 +118,9 @@ namespace CarWash_WPF
                     //Проверка корректности выбранного промежутка дат и Преобразование дат к формату MySQL(гггг - мм - дд) с помощью метода в классе Database
                     if (datePickerAppointmentsFrom.SelectedDate > datePickerAppointmentsTo.SelectedDate)
                         throw new Exception("Выбран некорректный промежуток дат!");
+                    if (datePickerAppointmentsFrom.SelectedDate.HasValue == false || datePickerAppointmentsTo.SelectedDate.HasValue == false)
+                        throw new Exception("Вы не выбрали дату");
+
                     string startDate = Database.ChangeDateToDatabaseFormat(datePickerAppointmentsFrom.ToString());
                     string endDate = Database.ChangeDateToDatabaseFormat(datePickerAppointmentsTo.ToString());
                     queryPartDate = $" AND APPOINTMENT_DATE BETWEEN '{startDate}' AND '{endDate}'";
