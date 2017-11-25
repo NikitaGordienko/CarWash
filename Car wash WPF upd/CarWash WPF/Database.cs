@@ -66,7 +66,7 @@ namespace CarWash_WPF
                 try
                 {
                     command.ExecuteNonQuery();
-                    transaction.Commit();                   
+                    transaction.Commit();
                 }
                 catch (Exception e)
                 {
@@ -147,10 +147,10 @@ namespace CarWash_WPF
              * Так же пока не понятно, будет ли работать метод, если нарушить структуру ID в DG
              */
             object[] rowElements = editableTable.Rows[selectedIndex].ItemArray;
-            int selectedID = IdentifyID(editableTable, selectedIndex); 
+            int selectedID = IdentifyID(editableTable, selectedIndex);
             string query = $"UPDATE {editableTable.TableName} SET ";
 
-            for (int i = 0; i < rowElements.Length-1; i++) 
+            for (int i = 0; i < rowElements.Length - 1; i++)
             {
                 if (withDate == true)
                 {
@@ -159,9 +159,9 @@ namespace CarWash_WPF
                 }
                 else
                 {
-                    query += editableTable.Columns[i].ColumnName + "=" + "\"" + rowElements[i].ToString()+ "\", ";
+                    query += editableTable.Columns[i].ColumnName + "=" + "\"" + rowElements[i].ToString() + "\", ";
                 }
-                
+
             }
             query += editableTable.Columns[rowElements.Length - 1].ColumnName + "=" + "\"" + rowElements[rowElements.Length - 1].ToString() + "\" "; // Запятой перед WHERE быть не должно
             query += $"WHERE {whereTable.TableName}_id = {selectedID};";
@@ -183,10 +183,10 @@ namespace CarWash_WPF
             List<string> finalList = new List<string>();
 
             for (int i = 0; i < queryList.Count; i++)
-            { 
+            {
                 string whereID = queryList[i].Substring(queryList[i].LastIndexOf(" ") + 1);
                 for (int j = i; j < queryList.Count; j++)
-                { 
+                {
                     if (queryList[j].Contains(whereID))
                     {
                         tempList.Add(queryList[j]);
@@ -205,7 +205,7 @@ namespace CarWash_WPF
         public static List<string> DeleteDeduplication(List<string> tempList)
         {
             int k = 0;
-            while(tempList.Count != 1)
+            while (tempList.Count != 1)
             {
                 if (tempList.Contains("DELETE"))
                 {
@@ -225,7 +225,7 @@ namespace CarWash_WPF
                 else
                     tempList.RemoveRange(0, tempList.Count - 1);
 
-                if (k>1)
+                if (k > 1)
                 {
                     tempList.RemoveRange(0, tempList.Count - 1);
                 }

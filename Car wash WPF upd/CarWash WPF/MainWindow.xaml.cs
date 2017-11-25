@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -62,7 +62,7 @@ namespace CarWash_WPF
                 string temp = e.Message;
                 MessageBox.Show($"Невозможно подключиться к базе данных. \nПожалуйста, обратитесь к администратору.\nError: {e.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-        }        
+        }
 
         //private void RefreshDGClients()
         //{
@@ -169,14 +169,14 @@ namespace CarWash_WPF
         {
             btnApplyClientChanges.Visibility = Visibility.Visible;
             btnSendClientQuery.Visibility = Visibility.Visible;
-            DGClients.IsReadOnly = false;           
+            DGClients.IsReadOnly = false;
             DGClients.Columns[0].IsReadOnly = true;
             DGClients.Columns[1].IsReadOnly = true;
         }
 
         private void btnApplyClientChanges_Click(object sender, RoutedEventArgs e)
-        {      
-            int currentRowIndex = DGClients.SelectedIndex;    
+        {
+            int currentRowIndex = DGClients.SelectedIndex;
             string updateQuery = Database.FormChangeRecordQuery(DS.Tables[0], DS.Tables[0], currentRowIndex, false);
             queryListClients.Add(updateQuery);
         }
@@ -193,7 +193,7 @@ namespace CarWash_WPF
             queryListClients = Database.EliminateQueryInconsistency(queryListClients);
             for (int i = 0; i < queryListClients.Count; i++)
             {
-                //MessageBox.Show(queryListClients[i]);
+                MessageBox.Show(queryListClients[i]);
                 Database.ExecuteWriter(queryListClients[i]);
             }
         }
@@ -221,7 +221,7 @@ namespace CarWash_WPF
             string deleteQuery = Database.FormDeleteRecordQuery(DS.Tables[1], DS.Tables[1], currentRowIndex);
             queryListAppointments.Add(deleteQuery);
         }
-        
+
         private void btnSendAppointmentQuery_Click(object sender, RoutedEventArgs e)
         {
             queryListAppointments = Database.EliminateQueryInconsistency(queryListAppointments);
@@ -241,7 +241,7 @@ namespace CarWash_WPF
             DGFeedback.Columns[1].IsReadOnly = true;
         }
 
-        private void btnApplyFeedbackChanges_Click(object sender, RoutedEventArgs e) 
+        private void btnApplyFeedbackChanges_Click(object sender, RoutedEventArgs e)
         {
             int currentRowIndex = DGFeedback.SelectedIndex;
             string updateQuery = Database.FormChangeRecordQuery(DS.Tables[2], DS.Tables[1], currentRowIndex, false);
