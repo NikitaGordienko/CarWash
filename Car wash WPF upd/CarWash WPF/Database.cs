@@ -1,183 +1,56 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using MySql.Data.MySqlClient;
-using System.Data;
-using System.Windows.Controls;
-
-namespace CarWash_WPF
-{
-    class Database //БЫЛ НЕ STATIC
-    {
-        // Test
-        // Test#2
-        private static string connectionString = "Server=localhost;Database=carwash;User Id=root;Password=;charset=utf8";
-        //private static string connectionString = "Server=185.26.122.48;Database=host1277275_nik;User Id=host1277275_nik;Password=123456789";
-        private static MySqlConnection connection = new MySqlConnection(connectionString);
-
-        public static void ExecuteReader(string query) //НЕ НУЖЕН
-        {
-            try
-            {
-                connection.Open();
-                MySqlCommand command = new MySqlCommand(query, connection);
-                MySqlDataReader reader = command.ExecuteReader();
-                if (reader.HasRows)
-                {
-                    for (int i = 0; i < reader.FieldCount; i++)
-                    {
-                        Console.Write(reader.GetName(i) + "\t");
-                    }
-                    Console.WriteLine();
-                    while (reader.Read())
-                    {
-                        for (int i = 0; i < reader.FieldCount; i++)
-                        {
-                            Console.Write(reader[i].ToString() + "\t");
-
-                        }
-                        Console.WriteLine();
-                    }
-                }
-
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                Application.Current.Shutdown();
-            }
-            finally
-            {
-                connection.Close();
-            }
-        }
-
-        public static void ExecuteWriter(string query)
-        {
-            try
-            {
-                connection.Open();
-                MySqlTransaction transaction = connection.BeginTransaction();
-                MySqlCommand command = new MySqlCommand(query, connection);
-                command.Transaction = transaction;
-                try
-                {
-                    command.ExecuteNonQuery();
-                    transaction.Commit();                   
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show(e.Message.ToString(), "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                    transaction.Rollback();
-                }
-
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message.ToString(), "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            finally
-            {
-                connection.Close();
-            }
-
-        }
-
-        public static DataTable CreateDataTable(string query)
-        {
-            try
-            {
-
-                // Открываем подключение
-                connection.Open();
-
-                // Создаем команду
-                MySqlCommand command = new MySqlCommand(query, connection);
-
-                // Создаем объект DataAdapter
-                MySqlDataAdapter adapter = new MySqlDataAdapter(command);
-
-                // Создаем объект DataTable (для работы с данными без подключения)
-                DataTable dt = new DataTable();
-
-                // Заполняем DataTable
-                adapter.Fill(dt);
-
-                return dt;
-
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message.ToString(), "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                Application.Current.Shutdown();
-                return null;
-            }
-            finally
-            {
-                connection.Close();
-            }
-
-        }
-
-        public static string ChangeDateToDatabaseFormat(string originalDate)
-        {
-            string newDate = "";
-            string tempYear = originalDate.Substring(6, 4);
-            string tempMonth = originalDate.Substring(3, 2);
-            string tempDay = originalDate.Substring(0, 2);
-            newDate = tempYear + "-" + tempMonth + "-" + tempDay;
-            return newDate;
-        }
-
-        // На вход получает объект таблицы, который соответствует DG и индекс выбранной строки в DG
-        public static string FormDeleteRecordQuery(DataTable editableTable_1, DataTable whereTable_2, int selectedIndex)
-        {
-            // Формирование запроса
-            string query = $"DELETE FROM {editableTable_1.TableName} WHERE {whereTable_2.TableName}_id = {selectedIndex}";
-            return query;
-        }
-
-        public static string FormChangeRecordQuery(DataGrid editableDG, DataTable editableTable, int selectedIndex, int startColumn)
-        {
-            /*
-             * Пока что запрос формируется на основе массива rowElements, который потом нужно будет передавать в метод в качестве параметра массива измененных значений
-             * Так же пока не понятно, будет ли работать метод, если нарушить структуру ID в DG
-             */
-            object[] rowElements = editableTable.Rows[selectedIndex].ItemArray;
-
-            int itemValue = GetItemValue(editableDG); 
-            string query = $"UPDATE {editableTable.TableName} SET ";
-            MessageBox.Show(query);
-            /* Тестирование проводилось для DGAppointments, в котором первые два столбца - первичные ключи, поэтому отсчет начинается с 2. (Так же нужно добавить как параметр метода)
-             * Или придумать другой способ отличать значения PK и FK от других атрибутов (например по _id)
-             */            
-            for (int i = startColumn; i < rowElements.Length; i++) 
-            {
-                query += editableTable.Columns[i].ColumnName + "=" + rowElements[i].ToString()+ " "; //ИЗМЕНИТЬ ЗАПРОС
-            }
-
-            query += $"WHERE {editableTable.TableName}_id = {itemValue}";
-
-            return query;
-        }
-
-        public static int GetItemValue(DataGrid editableDG)
-        {
-            int currentRowIndex = editableDG.SelectedIndex + 1;
-            TextBlock tbID = editableDG.Columns[0].GetCellContent(editableDG.Items[currentRowIndex - 1]) as TextBlock; //получаем значение ячейки *_id выбранной строки
-            string textItemID = tbID.Text;
-            int selectedItemID = int.Parse(textItemID);
-            return selectedItemID;
-        }
-
-        public static int IdentifyID(DataTable editableTable, int selectedIndex)
-        {
-            int id = (int)editableTable.Rows[selectedIndex][0];
-            return id;
-        }
-
-    }
-}
+<Window x:Class="CarWash_WPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CarWash_WPF"
+        mc:Ignorable="d"
+        ResizeMode="NoResize"
+        WindowStyle="None"
+        WindowStartupLocation="CenterScreen"
+        Title="Главное меню" Height="720" Width="1280" Background="{x:Null}">
+    <Grid x:Name="MainMenuWindow" Background="White" Loaded="MainMenuWindow_Loaded" >
+        <Grid HorizontalAlignment="Left" Height="28" Margin="0,0,0,692" VerticalAlignment="Bottom" Width="1280" Background="#FF272727" MouseDown="Grid_MouseDown">
+            <Button x:Name="btnClose" Content="&#xE711;" Margin="1248,3,0,0" VerticalAlignment="Top" BorderThickness="0" Height="22" Background="#FF272727" FontFamily="Segoe MDL2 Assets" FontSize="16" Foreground="White" Click="btnClose_Click" HorizontalAlignment="Left" Width="26"/>
+            <Button x:Name="btnMinimize" Content="0" HorizontalAlignment="Left" Margin="1215,3,0,0" Width="26" BorderThickness="0" Background="#FF272727" FontFamily="Marlett" FontSize="20" Foreground="White" Height="22" VerticalAlignment="Top" Click="btnMinimize_Click"/>
+        </Grid>
+        <Image HorizontalAlignment="Left" Height="80" Margin="30,33,0,0" VerticalAlignment="Top" Width="250" Source="Resources/ufrf_logo.png"/>
+        <Button x:Name="btnClients" Content="Клиенты" HorizontalAlignment="Left" Margin="30,145,0,490" Width="250" Background="{x:Null}" FontFamily="Microsoft JhengHei Light" FontSize="36" Click="btnClients_Click"/>
+        <Button x:Name="btnAppointments" Content="Записи" HorizontalAlignment="Left" Margin="30,248,0,387" Width="250" Background="{x:Null}" FontFamily="Microsoft JhengHei Light" FontSize="36" Click="btnAppointments_Click"/>
+        <Button x:Name="btnReports" Content="Отчеты" HorizontalAlignment="Left" Margin="30,454,0,182" Width="250" Background="{x:Null}" FontFamily="Microsoft JhengHei Light" FontSize="36" Click="btnReports_Click"/>
+        <Button x:Name="btnFeedback" Content="Отзывы" HorizontalAlignment="Left" Margin="30,351,0,285" Width="250" Background="{x:Null}" FontFamily="Microsoft JhengHei Light" FontSize="36" Click="btnFeedback_Click"/>
+        <TabControl x:Name="mwTab" Height="677" Margin="322,33,28,0" VerticalAlignment="Top" BorderBrush="{x:Null}">
+            <TabItem x:Name="tabClients" Header="Клиенты" Margin="-40,-31,36,29">
+                <Grid x:Name="pageClients" Background="White">
+                    <DataGrid x:Name="DGClients" HorizontalAlignment="Left" Height="566" VerticalAlignment="Top" Width="924" FontSize="15" FontFamily="Microsoft JhengHei Light" CanUserResizeColumns="False" CanUserReorderColumns="False" BorderBrush="#FF878787" AutoGeneratedColumns="DGClients_AutoGeneratedColumns"/>
+                    <Button x:Name="btnChangeClients" Content="Изменить" HorizontalAlignment="Left" Margin="0,588,0,0" VerticalAlignment="Top" Width="154" Background="#FF007ACC" Foreground="White" Height="39" FontFamily="Microsoft JhengHei Light" FontSize="18" BorderThickness="0" Click="btnChangeClients_Click" />
+                    <Button x:Name="btnDeleteClients" Content="Удалить" HorizontalAlignment="Left" Margin="195,588,0,0" VerticalAlignment="Top" Width="154" Background="#FF007ACC" Foreground="White" Height="39" FontFamily="Microsoft JhengHei Light" FontSize="18" BorderThickness="0" Click="btnDeleteClients_Click" />
+                    <Button x:Name="btnApplyClientChanges" Content="Применить" HorizontalAlignment="Left" Margin="389,588,0,0" VerticalAlignment="Top" Width="154" Background="#FF007ACC" Foreground="White" Height="39" FontFamily="Microsoft JhengHei Light" FontSize="18" BorderThickness="0" Click="btnApplyClientChanges_Click"/>
+                    <Button x:Name="btnSendClientQuery" Content="Отправить" HorizontalAlignment="Left" Margin="582,588,0,0" VerticalAlignment="Top" Width="154" Background="#FF007ACC" Foreground="White" Height="39" FontFamily="Microsoft JhengHei Light" FontSize="18" BorderThickness="0" Click="btnSendClientQuery_Click"/>
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="tabAppointments" Header="Записи" Margin="-37,-31,33,29">
+                <Grid x:Name="pageAppointments" Background="White">
+                    <DataGrid x:Name="DGAppointments" HorizontalAlignment="Left" Height="566" VerticalAlignment="Top" Width="924" FontFamily="Microsoft JhengHei Light" FontSize="15" BorderBrush="White" SelectionUnit="FullRow" AutoGeneratedColumns="DGAppointments_AutoGeneratedColumns"/>
+                    <Button x:Name="btnChangeAppointments" Content="Изменить" HorizontalAlignment="Left" Margin="0,588,0,0" VerticalAlignment="Top" Width="154" Background="#FF007ACC" Foreground="White" Height="39" FontFamily="Microsoft JhengHei Light" FontSize="18" BorderThickness="0" Click="btnChangeAppointments_Click" />
+                    <Button x:Name="btnDeleteAppointments" Content="Удалить" HorizontalAlignment="Left" Margin="195,588,0,0" VerticalAlignment="Top" Width="154" Background="#FF007ACC" Foreground="White" Height="39" FontFamily="Microsoft JhengHei Light" FontSize="18" BorderThickness="0" Click="btnDeleteAppointments_Click" />
+                    <Button x:Name="btnApplyAppointmentChanges" Content="Применить" HorizontalAlignment="Left" Margin="389,588,0,0" VerticalAlignment="Top" Width="154" Background="#FF007ACC" Foreground="White" Height="39" FontFamily="Microsoft JhengHei Light" FontSize="18" BorderThickness="0" Click="btnApplyAppointmentChanges_Click" />
+                    <Button x:Name="btnSendAppointmentQuery" Content="Отправить" HorizontalAlignment="Left" Margin="582,588,0,0" VerticalAlignment="Top" Width="154" Background="#FF007ACC" Foreground="White" Height="39" FontFamily="Microsoft JhengHei Light" FontSize="18" BorderThickness="0" Click="btnSendAppointmentQuery_Click" />
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="tabFeedback" Header="Отзывы" Margin="-33,-31,29,29" BorderBrush="#FF878787">
+                <Grid x:Name="pageFeedback" Background="White">
+                    <DataGrid x:Name="DGFeedback" HorizontalAlignment="Left" Height="566" VerticalAlignment="Top" Width="924" FontSize="15" FontFamily="Microsoft JhengHei Light" BorderBrush="#FF878787" AutoGeneratedColumns="DGFeedback_AutoGeneratedColumns"/>
+                    <Button x:Name="btnChangeFeedback" Content="Изменить" HorizontalAlignment="Left" Margin="0,588,0,0" VerticalAlignment="Top" Width="154" Background="#FF007ACC" Foreground="White" Height="39" FontFamily="Microsoft JhengHei Light" FontSize="18" BorderThickness="0" Click="btnChangeFeedback_Click" />
+                    <Button x:Name="btnDeleteFeedback" Content="Удалить" HorizontalAlignment="Left" Margin="195,588,0,0" VerticalAlignment="Top" Width="154" Background="#FF007ACC" Foreground="White" Height="39" FontFamily="Microsoft JhengHei Light" FontSize="18" BorderThickness="0" Click="btnDeleteFeedback_Click" />
+                    <Button x:Name="btnApplyFeedbackChanges" Content="Применить" HorizontalAlignment="Left" Margin="389,588,0,0" VerticalAlignment="Top" Width="154" Background="#FF007ACC" Foreground="White" Height="39" FontFamily="Microsoft JhengHei Light" FontSize="18" BorderThickness="0" Click="btnApplyFeedbackChanges_Click" />
+                    <Button x:Name="btnSendFeedbackQuery" Content="Отправить" HorizontalAlignment="Left" Margin="582,588,0,0" VerticalAlignment="Top" Width="154" Background="#FF007ACC" Foreground="White" Height="39" FontFamily="Microsoft JhengHei Light" FontSize="18" BorderThickness="0" Click="btnSendFeedbackQuery_Click" />
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="tabReports" Header="Отчеты" Margin="-29,-31,25,29" BorderBrush="#FF878787">
+                <Grid x:Name="pageReports"/>
+            </TabItem>
+        </TabControl>
+        <Rectangle Fill="#FF878787" HorizontalAlignment="Left" Height="564" Margin="301,59,0,0" Stroke="Black" VerticalAlignment="Top" Width="1" Opacity="0.2"/>
+    </Grid>
+</Window>
