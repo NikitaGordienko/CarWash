@@ -38,7 +38,7 @@ namespace CarWash_WPF
             return new string(Enumerable.Repeat(chars, length)
               .Select(s => s[random.Next(s.Length)]).ToArray());
         }
-
+        // Метод создания хешированной алгоритмом SHA-256 строки
         public static string GetSHA256Hash(string input)
         {
             SHA256 newSHA256 = SHA256.Create();
@@ -77,20 +77,20 @@ namespace CarWash_WPF
                     if (res == 0)
                     {
                         if (tbPassword.Length >= 8)
-                        {
+                        {   // проверка паттерна при вводе поля "e-mail"
                             if (Regex.IsMatch(tbEmail, @"^(?("")("".+?""@)|(([0-9a-zA-Z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-zA-Z])@))(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,6}))$") && Regex.IsMatch(tbFio, @"^[a-яA-Я''-'\s]{1,50}$"))
                             {
-                                string salt = GenerateSalt(10);  //генерация соли
+                                string salt = GenerateSalt(10);  // Генерация соли
                                 hashFirstStep = GetSHA256Hash(tbPassword);
                                 hashSecondStep = GetSHA256Hash(hashFirstStep + salt);
                                 hashFinalStep = GetSHA256Hash(hashSecondStep + programConst);
 
-                                string query = $"INSERT INTO users (login, password, name, email, user_type, salt) VALUES ('{tbLogin}', '{hashFinalStep}', '{tbFio}', '{tbEmail}', '1', '{salt}')"; //Остался USER_TYPE
+                                string query = $"INSERT INTO users (login, password, name, email, user_type, salt) VALUES ('{tbLogin}', '{hashFinalStep}', '{tbFio}', '{tbEmail}', '1', '{salt}')"; //user_type - 1, т.к. пока нет разделения администраторских учетных записей
                                 MySqlCommand cmnd = new MySqlCommand(query, connection);
-                                cmnd.ExecuteNonQuery(); //Выполнение запроса
+                                cmnd.ExecuteNonQuery(); // Выполнение запроса
                                 MessageBox.Show("Регистрация пройдена!");
                                 LoginPage log_p = new LoginPage();
-                                log_p.Show();   //?? или showdialog ??
+                                log_p.Show();   
                                 Close();
                             }
                             else

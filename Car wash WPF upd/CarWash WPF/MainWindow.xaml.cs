@@ -24,7 +24,7 @@ namespace CarWash_WPF
 
         // Стандартные SQL-запросы на вывод всех данных
         private readonly string ShowAllClientsQuery = @"SELECT * FROM client";
-        private readonly string ShowAllAppointmentsQuery = @"SELECT * FROM appointment"; //`appointment_id`,`client_id`,`appointment_time`,`appointment_date`, `car_type`,`interior_cleaning`,`diagnostics`,`price`
+        private readonly string ShowAllAppointmentsQuery = @"SELECT * FROM appointment";
         private readonly string ShowAllFeedbackQuery = @"SELECT * FROM review";
         private DataSet DS = new DataSet("Carwash");
 
@@ -63,14 +63,6 @@ namespace CarWash_WPF
                 MessageBox.Show($"Невозможно подключиться к базе данных. \nПожалуйста, обратитесь к администратору.\nError: {e.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
-        //private void RefreshDGClients()
-        //{
-        //    DGClients.ItemsSource = null;
-        //    DataTable ClientsDT = Database.CreateDataTable(ShowAllClientsQuery);
-        //    DGClients.ItemsSource = DS.Tables[0].DefaultView;
-        //    btnApplyClientChanges.Visibility = Visibility.Hidden;
-        //}
 
         private void MainMenuWindow_Loaded(object sender, RoutedEventArgs e)
         {

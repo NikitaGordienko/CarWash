@@ -59,9 +59,9 @@ namespace CarWash_WPF
                     connection.Open();
                     string query_salt = $"SELECT salt from users where `login` = '{tbLogin}'";
                     MySqlCommand cmnd_salt = new MySqlCommand(query_salt, connection);
-                    object resSalt = cmnd_salt.ExecuteScalar();
+                    object resSalt = cmnd_salt.ExecuteScalar(); //выполняет запрос,возвращает значение первого ряда из таблицы-результата запроса
                     selectedSalt = Convert.ToString(resSalt);
-
+                    //проверка наличия пользователя по наличию соответствующей соли
                     if (selectedSalt != "")
                     {
                         string firstStepCheck = GetSHA256Hash(tbPass);
