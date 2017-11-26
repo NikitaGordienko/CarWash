@@ -26,17 +26,19 @@ namespace CarWash_WPF
         DataTable ClientsByRegDateDT;
         DataTable AppointmentsByDateAndPriceDT;
         DataTable FeedbackByRateDT;
-        List<string> collection = new List<string> { ">=", "=", "<=" };
+        List<string> collection = new List<string> { ">=", "=", "<=" }; // Используется в качестве параметра для фильтрации
 
         private static Excel.Application objApp;
         private static Excel._Workbook objBook;
 
+        // Конструктор класса. Передает DataSet из главного окна в отчеты для отображения полного списка записей до фильтрации
         public ReportsWindow(DataSet MainWindowsDS)
         {
             InitializeComponent();
             DS = MainWindowsDS;
         }
 
+        // Событие загрузки формы
         private void ReportFormWindow_Loaded(object sender, RoutedEventArgs e)
         {
             DGClientsByDate.CanUserResizeColumns = false;
@@ -46,10 +48,12 @@ namespace CarWash_WPF
             DGFeedbackByRate.CanUserResizeColumns = false;
             DGFeedbackByRate.IsReadOnly = true;
 
+            // Инициализация DataTable
             ClientsByRegDateDT = DS.Tables[0];
             AppointmentsByDateAndPriceDT = DS.Tables[1];
             FeedbackByRateDT = DS.Tables[2];
 
+            // Установка источников для отображения DG
             DGClientsByDate.ItemsSource = ClientsByRegDateDT.DefaultView;
             DGAppointmentsByDateAndPrice.ItemsSource = AppointmentsByDateAndPriceDT.DefaultView;
             DGFeedbackByRate.ItemsSource = FeedbackByRateDT.DefaultView;
@@ -113,6 +117,9 @@ namespace CarWash_WPF
                 string queryPartBox;
                 string queryPartClass;
 
+                //
+                // Формирование запроса в соответствии с выбранными параметрами
+                // 
                 if (cbTurnOnDateSort.IsChecked == true)
                 {
                     //Проверка корректности выбранного промежутка дат и Преобразование дат к формату MySQL(гггг - мм - дд) с помощью метода в классе Database
@@ -290,30 +297,30 @@ namespace CarWash_WPF
             ClassBox.IsEnabled = false;
         }
 
-
+        // Формирование отчета в Excel на основе DataTable ClientsByRegDateDT, сформированной при выполнении фильтрации
         private void FormClientsExcelReport_Click(object sender, RoutedEventArgs e)
         {
-            this.IsEnabled = false;
-            object[][] reportArray = CreateArrayFromDataTable(ClientsByRegDateDT);
-            object[][] headingArray = CreateHeadingArrayFromDataTable(ClientsByRegDateDT);
-            object[,] reportArray2D = CreateTwoDimensionalArrayFromStepArray(reportArray);
-            object[,] headingArray2D = CreateTwoDimensionalArrayFromStepArray(headingArray);
-            CreateExcelReport(headingArray2D, reportArray2D);
-            this.IsEnabled = true;
+            this.IsEnabled = false; // Отключение формы на период формирования
+            object[][] reportArray = CreateArrayFromDataTable(ClientsByRegDateDT); // Формирование ступенчатого массива из DataTable (содержание)
+            object[][] headingArray = CreateHeadingArrayFromDataTable(ClientsByRegDateDT); // Формирование ступенчатого массива из DataTable (заголовки)
+            object[,] reportArray2D = CreateTwoDimensionalArrayFromStepArray(reportArray); // Преобразование к двумерному массиву
+            object[,] headingArray2D = CreateTwoDimensionalArrayFromStepArray(headingArray); // Преобразование к двумерному массиву
+            CreateExcelReport(headingArray2D, reportArray2D); // Вызов метода CreateExcelReport для формирования отчета
+            this.IsEnabled = true; // Включение формы
         }
 
         private void FormAppointmentsExcelReport_Click(object sender, RoutedEventArgs e)
         {
-            double max, min, avg, sum;
+            double max, min, avg, sum; // Переменные для хранения соответствующих значений
             this.IsEnabled = false;
-            object[][] reportArray = CreateArrayFromDataTable(AppointmentsByDateAndPriceDT);
-            object[][] headingArray = CreateHeadingArrayFromDataTable(AppointmentsByDateAndPriceDT);
-            object[,] reportArray2D = CreateTwoDimensionalArrayFromStepArray(reportArray);
-            reportArray2D = ChangeStructure(reportArray2D);
-            FindMaxMinAvgSumPrice(reportArray2D, out max, out min, out avg, out sum);
-            object[,] totalsArray = new object[,] { { "SUM:", sum.ToString() }, { "MAX:", max.ToString() }, { "MIN:", min.ToString() }, { "AVG:", avg.ToString("#.##") } };
-            object[,] headingArray2D = CreateTwoDimensionalArrayFromStepArray(headingArray);
-            CreateExcelReport(headingArray2D, reportArray2D, totalsArray);
+            object[][] reportArray = CreateArrayFromDataTable(AppointmentsByDateAndPriceDT); // Формирование ступенчатого массива из DataTable (содержание)
+            object[][] headingArray = CreateHeadingArrayFromDataTable(AppointmentsByDateAndPriceDT); // Формирование ступенчатого массива из DataTable(заголовки)
+            object[,] reportArray2D = CreateTwoDimensionalArrayFromStepArray(reportArray); // Преобразование к двумерному массиву
+            reportArray2D = ChangeStructure(reportArray2D); // Преобразование даты в формат ДД.ММ.ГГГГ
+            FindMaxMinAvgSumPrice(reportArray2D, out max, out min, out avg, out sum); // Вызов метода для поиска значений
+            object[,] totalsArray = new object[,] { { "SUM:", sum.ToString() }, { "MAX:", max.ToString() }, { "MIN:", min.ToString() }, { "AVG:", avg.ToString("#.##") } }; // Создание двухмерного массива с результатами
+            object[,] headingArray2D = CreateTwoDimensionalArrayFromStepArray(headingArray); // Преобразование к двумерному массиву
+            CreateExcelReport(headingArray2D, reportArray2D, totalsArray); // Вызов перегрузки метода CreateExcelReport, которая принимает на вход три параметра
             this.IsEnabled = true;
         }
 
@@ -328,18 +335,22 @@ namespace CarWash_WPF
             this.IsEnabled = true;
         }
 
+        //
         //Методы работы с Excel
+        //
+
+        // Изменение структуры даты и приведение к формату ДД.ММ.ГГГГ
         private object[,] ChangeStructure(object[,] reportArray2D)
         {
             for (int i = 0; i < reportArray2D.GetLength(0); i++)
             {
                 for (int j = 0; j < reportArray2D.GetLength(1); j++)
                 {
-                    if (reportArray2D[i, j].GetType() == typeof(DateTime))
+                    if (reportArray2D[i, j].GetType() == typeof(DateTime)) // Поиск ячейки с типом данных DateTime
                     {
-                        DateTime tempDate = (DateTime)reportArray2D[i, j];
-                        string tempDateString = tempDate.ToShortDateString();
-                        reportArray2D[i, j] = tempDateString;
+                        DateTime tempDate = (DateTime)reportArray2D[i, j]; // Получение значения ячейки
+                        string tempDateString = tempDate.ToShortDateString(); // Преобразование в строку методом ToShortDateString()
+                        reportArray2D[i, j] = tempDateString; // Переопределение ячейки
                     }
                     else
                     {
@@ -352,6 +363,7 @@ namespace CarWash_WPF
             return reportArray2D;
         }
 
+        // Создание ступенчатого массива из DataTable
         private object[][] CreateArrayFromDataTable(DataTable reportTable)
         {
             object[][] reportArray = new object[reportTable.Rows.Count][];
@@ -363,6 +375,7 @@ namespace CarWash_WPF
             return reportArray;
         }
 
+        // Создание ступенчатого массива заголовков из DataTable
         private object[][] CreateHeadingArrayFromDataTable(DataTable reportTable)
         {
             object[][] headingArray = new object[1][];
@@ -374,6 +387,7 @@ namespace CarWash_WPF
             return headingArray;
         }
 
+        // Преобразование ступенчатых массивов в двумерные массивы
         private object[,] CreateTwoDimensionalArrayFromStepArray(object[][] reportArray)
         {
             object[,] reportArray2D = new object[reportArray.GetLength(0), reportArray[0].GetLength(0)];
@@ -387,24 +401,29 @@ namespace CarWash_WPF
 
         private void CreateExcelReport(object[,] headingArray, object[,] reportArray)
         {
+            // Создание объектов для дальнейшей работы
             Excel.Range range;
             Excel.Workbooks objBooks;
             Excel.Sheets objSheets;
             Excel._Worksheet objSheet;
 
+            // Формирование стандартного файла
             objApp = new Excel.Application();
             objBooks = objApp.Workbooks;
             objBook = objBooks.Add(Missing.Value);
             objSheets = objBook.Worksheets;
             objSheet = (Excel._Worksheet)objSheets.get_Item(1);
 
-            range = objSheet.get_Range("A1", Missing.Value);
-            range = range.get_Resize(headingArray.GetLength(0), headingArray.GetLength(1));
-            range.set_Value(Missing.Value, headingArray);
+            // Определение редактируемого массива ячеек и их заполнение
+            range = objSheet.get_Range("A1", Missing.Value); // Выделение ячеек начиная с A1
+            range = range.get_Resize(headingArray.GetLength(0), headingArray.GetLength(1)); // Выделение редактируемого массива ячеек на основе количества строк и столбцов
+            range.set_Value(Missing.Value, headingArray); // Заполнение редактируемого массива ячеек
 
             range = objSheet.get_Range("A2", Missing.Value);
             range = range.get_Resize(reportArray.GetLength(0), reportArray.GetLength(1));
             range.set_Value(Missing.Value, reportArray);
+
+            // Отображение результата
             objApp.Visible = true;
             objApp.UserControl = true;
         }
@@ -438,6 +457,7 @@ namespace CarWash_WPF
             objApp.UserControl = true;
         }
 
+        // Поиск максимума, минимума, среднего и суммы по атрибуту price
         private void FindMaxMinAvgSumPrice(object[,] reportArray, out double max, out double min, out double avg, out double sum)
         {
             max = double.MinValue;
