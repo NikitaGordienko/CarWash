@@ -10,15 +10,16 @@ using System.Windows.Controls;
 
 namespace CarWash_WPF
 {
-    class Database //БЫЛ НЕ STATIC
+    static class Database
     {
-        // Test
-        // Test#2
-        private static string connectionString = "Server=localhost;Database=carwash;User Id=root;Password=;charset=utf8";
-        //private static string connectionString = "Server=185.26.122.48;Database=host1277275_nik;User Id=host1277275_nik;Password=123456789";
+        // Строка подключения. Используется в качестве параметра для установки подключения.
+        private const string connectionString = "Server=localhost;Database=carwash;User Id=root;Password=;charset=utf8";
+        //private const static string connectionString = "Server=185.26.122.48;Database=host1277275_nik;User Id=host1277275_nik;Password=123456789";
+        // Объект MySQLConnection. Используется в метотдах в качестве объекта подключения
         private static MySqlConnection connection = new MySqlConnection(connectionString);
 
-        public static void ExecuteReader(string query) //НЕ НУЖЕН
+        // Выводит результат запроса в консоль. Не используется.
+        public static void ExecuteReader(string query) 
         {
             try
             {
@@ -55,80 +56,73 @@ namespace CarWash_WPF
             }
         }
 
+        // Исполняет запрос на UPDATE, DELETE и т. п. На вход получает строковую переменную с запросом
         public static void ExecuteWriter(string query)
         {
-            try
+            try // Блок TryCatchFinally №1. Основное назначение - проверить наличие подключения и в случае его отсутствия выдать сообщение об ошибке
             {
-                connection.Open();
-                MySqlTransaction transaction = connection.BeginTransaction();
-                MySqlCommand command = new MySqlCommand(query, connection);
-                command.Transaction = transaction;
-                try
+                connection.Open(); // Открытие подключения
+                MySqlTransaction transaction = connection.BeginTransaction(); // Создание объекта транзакции
+                MySqlCommand command = new MySqlCommand(query, connection); // Создание объекта команды на основе запроса и подключения
+                command.Transaction = transaction; // Установление транзакции для исполнения текующей команды (запроса)
+                try // Блок TryCatch №2. В случае, если невозможно выполнить запрос управление перейдет на блок Catch и откатит транзакцию
                 {
-                    command.ExecuteNonQuery();
-                    transaction.Commit();
+                    command.ExecuteNonQuery(); // Исполнение команды (запроса)
+                    transaction.Commit(); // Подтверждение транзакции
                 }
                 catch (Exception e)
                 {
-                    MessageBox.Show(e.Message.ToString(), "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                    transaction.Rollback();
+                    MessageBox.Show(e.Message.ToString(), "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error); // Вывод сообщения об ошибке
+                    transaction.Rollback(); // Откат транзакции
                 }
 
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message.ToString(), "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(e.Message.ToString(), "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error); // Вывод сообщения об ошибке
             }
-            finally
+            finally // Блок Finally исполняется в любом случае и закрывает подключение к базе данных
             {
                 connection.Close();
             }
 
         }
 
+        // Исполнение запроса на SELECT и получение результата в качестве объекта DataTable
         public static DataTable CreateDataTable(string query)
         {
             try
             {
-
-                // Открываем подключение
-                connection.Open();
-
-                // Создаем команду
-                MySqlCommand command = new MySqlCommand(query, connection);
-
-                // Создаем объект DataAdapter
-                MySqlDataAdapter adapter = new MySqlDataAdapter(command);
-
-                // Создаем объект DataTable (для работы с данными без подключения)
-                DataTable dt = new DataTable();
-
-                // Заполняем DataTable
-                adapter.Fill(dt);
-
-                return dt;
+                connection.Open(); // Открываем подключение
+                MySqlCommand command = new MySqlCommand(query, connection); // Создание объекта команды на основе запроса и подключения
+                MySqlDataAdapter adapter = new MySqlDataAdapter(command); // Создаем объект DataAdapter
+                DataTable dt = new DataTable(); // Создаем объект DataTable (для работы с данными без подключения)
+                adapter.Fill(dt);  // Заполняем DataTable
+                return dt; // Возвращаемый объект
 
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message.ToString(), "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                Application.Current.Shutdown();
+                MessageBox.Show(e.Message.ToString(), "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error); // Вывод сообщения об ошибке
+                Application.Current.Shutdown(); // Отключение приложения
                 return null;
             }
-            finally
+            finally // Блок Finally исполняется в любом случае и закрывает подключение к базе данных
             {
                 connection.Close();
             }
 
         }
 
+        // в MySQL дата отображается в формате ГГГГ-ММ-ДД. В программе используется формат ДД.ММ.ГГГГ
+        // Метод используется для обеспечения совместимости
         public static string ChangeDateToDatabaseFormat(string originalDate)
         {
             string newDate = "";
             string tempYear = originalDate.Substring(6, 4);
             string tempMonth = originalDate.Substring(3, 2);
             string tempDay = originalDate.Substring(0, 2);
-            newDate = tempYear + "-" + tempMonth + "-" + tempDay;
+            newDate = tempYear + "-" + tempMonth + "-" + tempDay; // Формирование даты в новом формате
             return newDate;
         }
 
@@ -169,14 +163,17 @@ namespace CarWash_WPF
             return query;
         }
 
+        // Метод предназначен для определения значения поля ID выделенной записи
         public static int IdentifyID(DataTable editableTable, int selectedIndex)
         {
-            int id = (int)editableTable.Rows[selectedIndex][0];
+            int id = (int)editableTable.Rows[selectedIndex][0]; // Выбранная строка + Столбец №0
             return id;
         }
 
-        // В приоритет взят запрос на DELETE, т.к либо пользователь удаляет измененную строку, либо пытается изменить уже удаленную строку. - V
-        // Если формируется два запроса на UPDATE одной строке, то приоритет отдается последнему запросу - X
+        // Используется для устранения противоречивовсти в списке запросов на исполнение.
+        // Например изменение удаленной строки или изменение одной строки несколько раз
+        // В приоритет взят запрос на DELETE, т.к либо пользователь удаляет измененную строку, либо пытается изменить уже удаленную строку.
+        // Если формируется два запроса на UPDATE одной строке, то приоритет отдается последнему запросу
         public static List<string> EliminateQueryInconsistency(List<string> queryList)
         {
             List<string> tempList = new List<string>();
@@ -184,55 +181,59 @@ namespace CarWash_WPF
 
             for (int i = 0; i < queryList.Count; i++)
             {
-                string whereID = queryList[i].Substring(queryList[i].LastIndexOf(" ") + 1);
+                string whereID = queryList[i].Substring(queryList[i].LastIndexOf(" ") + 1); // Выделение ID из запроса (WHERE example_id = ID)
                 for (int j = i; j < queryList.Count; j++)
                 {
                     if (queryList[j].Contains(whereID))
                     {
-                        tempList.Add(queryList[j]);
-                        queryList[j] = "NULL";
+                        tempList.Add(queryList[j]); // TempList собирается все запросы содержащие определенный ID
+                        queryList[j] = "NULL"; // Все собранные запросы в основном списке заменяются на NULL
                     }
                 }
-                tempList = DeleteDeduplication(tempList);
-                finalList.AddRange(tempList);
+                tempList = DeleteDuplication(tempList); // Выделение одного приоритетного запроса в TempList
+                finalList.AddRange(tempList); // Добавление запроса в финальный список для возвращения
                 tempList.Clear();
             }
 
-            finalList = RemoveNullItems(finalList);
+            finalList = RemoveNullItems(finalList); // Очистка от NULL строк
             return finalList;
         }
 
-        public static List<string> DeleteDeduplication(List<string> tempList)
+        // Вспомогательный метод для EliminateQueryInconsistency
+        // Позволяет в рамках списка запросов для определенного ID выделить приоритеный запрос, а остальные удалить
+        public static List<string> DeleteDuplication(List<string> tempList)
         {
             int k = 0;
-            while (tempList.Count != 1)
+            while (tempList.Count != 1) // Цикл работает пока не останется один запрос на DELETE или UPDATE
             {
-                if (tempList.Contains("DELETE"))
+                if (tempList.Contains("DELETE")) // Если список содержит запрос на DELETE (соответственно этот запрос ставится в приоритет)
                 {
                     for (int i = 0; i < tempList.Count; i++)
                     {
                         if (!tempList[i].Contains("DELETE"))
                         {
-                            tempList.RemoveAt(i);
+                            tempList.RemoveAt(i); // Удаление всех записей не содержащих DELETE
                         }
                         else
                         {
-                            k++;
+                            k++; // Подсчет записей с DELETE
                         }
 
                     }
                 }
-                else
-                    tempList.RemoveRange(0, tempList.Count - 1);
+                else // Если список не содержит ни одного запроса на DELETE
+                    tempList.RemoveRange(0, tempList.Count - 1); // Выбирается самый последний запрос в списке, а остальные удаляются
 
                 if (k > 1)
                 {
-                    tempList.RemoveRange(0, tempList.Count - 1);
+                    tempList.RemoveRange(0, tempList.Count - 1); // Удаление дублированных записей DELETE, если такие имеются
                 }
             }
             return tempList;
         }
 
+        // Вспомогательный метод для EliminateQueryInconsistency
+        // Удаляет все записи, содержащие строку NULL
         public static List<string> RemoveNullItems(List<string> finalList)
         {
             while (finalList.Contains("NULL"))
