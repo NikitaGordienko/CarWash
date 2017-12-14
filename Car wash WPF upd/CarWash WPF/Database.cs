@@ -10,11 +10,11 @@ using System.Windows.Controls;
 
 namespace CarWash_WPF
 {
-    static class Database
+    public static class Database
     {
         // Строка подключения. Используется в качестве параметра для установки подключения.
-        private const string connectionString = "Server=localhost;Database=carwash;User Id=root;Password=;charset=utf8";
-        //private const static string connectionString = "Server=185.26.122.48;Database=host1277275_nik;User Id=host1277275_nik;Password=123456789";
+        //private const string connectionString = "Server=localhost;Database=carwash;User Id=root;Password=;charset=utf8";
+        private const string connectionString = "Server=185.26.122.48;Database=host1277275_nik;User Id=host1277275_nik;Password=123456789";
         // Объект MySQLConnection. Используется в метотдах в качестве объекта подключения
         private static MySqlConnection connection = new MySqlConnection(connectionString);
 
@@ -55,10 +55,11 @@ namespace CarWash_WPF
                 connection.Close();
             }
         }
-
+        
         // Исполняет запрос на UPDATE, DELETE и т. п. На вход получает строковую переменную с запросом
-        public static void ExecuteWriter(string query)
+        public static string ExecuteWriter(string query)
         {
+            string executeStatus = "Execute";
             try // Блок TryCatchFinally №1. Основное назначение - проверить наличие подключения и в случае его отсутствия выдать сообщение об ошибке
             {
                 connection.Open(); // Открытие подключения
@@ -69,23 +70,26 @@ namespace CarWash_WPF
                 {
                     command.ExecuteNonQuery(); // Исполнение команды (запроса)
                     transaction.Commit(); // Подтверждение транзакции
+                    executeStatus+="-Success";
                 }
                 catch (Exception e)
                 {
                     MessageBox.Show(e.Message.ToString(), "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error); // Вывод сообщения об ошибке
                     transaction.Rollback(); // Откат транзакции
+                    executeStatus += "-Failure";
                 }
 
             }
             catch (Exception e)
             {
                 MessageBox.Show(e.Message.ToString(), "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error); // Вывод сообщения об ошибке
+                executeStatus += "--Failure";
             }
             finally // Блок Finally исполняется в любом случае и закрывает подключение к базе данных
             {
                 connection.Close();
             }
-
+            return executeStatus;
         }
 
         // Исполнение запроса на SELECT и получение результата в качестве объекта DataTable

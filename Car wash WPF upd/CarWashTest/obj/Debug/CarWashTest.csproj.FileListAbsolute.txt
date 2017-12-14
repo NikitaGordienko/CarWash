@@ -1,0 +1,21 @@
+C:\Users\Nekit\Documents\GitHub\CarWash\Car wash WPF upd\CarWashTest\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.dll
+C:\Users\Nekit\Documents\GitHub\CarWash\Car wash WPF upd\CarWashTest\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.Interface.dll
+C:\Users\Nekit\Documents\GitHub\CarWash\Car wash WPF upd\CarWashTest\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.dll
+C:\Users\Nekit\Documents\GitHub\CarWash\Car wash WPF upd\CarWashTest\bin\Debug\ru\Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.resources.dll
+C:\Users\Nekit\Documents\GitHub\CarWash\Car wash WPF upd\CarWashTest\bin\Debug\ru\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.resources.dll
+C:\Users\Nekit\Documents\GitHub\CarWash\Car wash WPF upd\CarWashTest\bin\Debug\ru\Microsoft.VisualStudio.TestPlatform.TestFramework.resources.dll
+C:\Users\Nekit\Documents\GitHub\CarWash\Car wash WPF upd\CarWashTest\bin\Debug\CarWashTest.dll
+C:\Users\Nekit\Documents\GitHub\CarWash\Car wash WPF upd\CarWashTest\bin\Debug\CarWashTest.pdb
+C:\Users\Nekit\Documents\GitHub\CarWash\Car wash WPF upd\CarWashTest\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.dll
+C:\Users\Nekit\Documents\GitHub\CarWash\Car wash WPF upd\CarWashTest\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll
+C:\Users\Nekit\Documents\GitHub\CarWash\Car wash WPF upd\CarWashTest\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.xml
+C:\Users\Nekit\Documents\GitHub\CarWash\Car wash WPF upd\CarWashTest\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.xml
+C:\Users\Nekit\Documents\GitHub\CarWash\Car wash WPF upd\CarWashTest\obj\Debug\CarWashTest.csprojResolveAssemblyReference.cache
+C:\Users\Nekit\Documents\GitHub\CarWash\Car wash WPF upd\CarWashTest\obj\Debug\CarWashTest.csproj.CoreCompileInputs.cache
+C:\Users\Nekit\Documents\GitHub\CarWash\Car wash WPF upd\CarWashTest\obj\Debug\CarWashTest.dll
+C:\Users\Nekit\Documents\GitHub\CarWash\Car wash WPF upd\CarWashTest\obj\Debug\CarWashTest.pdb
+C:\Users\Nekit\Documents\GitHub\CarWash\Car wash WPF upd\CarWashTest\bin\Debug\CarWash WPF.exe
+C:\Users\Nekit\Documents\GitHub\CarWash\Car wash WPF upd\CarWashTest\bin\Debug\MySql.Data.dll
+C:\Users\Nekit\Documents\GitHub\CarWash\Car wash WPF upd\CarWashTest\bin\Debug\CarWash WPF.pdb
+C:\Users\Nekit\Documents\GitHub\CarWash\Car wash WPF upd\CarWashTest\bin\Debug\CarWash WPF.exe.config
+C:\Users\Nekit\Documents\GitHub\CarWash\Car wash WPF upd\CarWashTest\bin\Debug\MySql.Data.xml

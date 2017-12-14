@@ -1,0 +1,24 @@
+C:\Users\Nekit\Documents\GitHub\CarWash\Car wash WPF upd\CarWash WPF\bin\Release\CarWash WPF.exe.config
+C:\Users\Nekit\Documents\GitHub\CarWash\Car wash WPF upd\CarWash WPF\bin\Release\CarWash WPF.exe
+C:\Users\Nekit\Documents\GitHub\CarWash\Car wash WPF upd\CarWash WPF\bin\Release\CarWash WPF.pdb
+C:\Users\Nekit\Documents\GitHub\CarWash\Car wash WPF upd\CarWash WPF\bin\Release\MySql.Data.dll
+C:\Users\Nekit\Documents\GitHub\CarWash\Car wash WPF upd\CarWash WPF\bin\Release\MySql.Data.xml
+C:\Users\Nekit\Documents\GitHub\CarWash\Car wash WPF upd\CarWash WPF\obj\Release\CarWash WPF.csprojResolveAssemblyReference.cache
+C:\Users\Nekit\Documents\GitHub\CarWash\Car wash WPF upd\CarWash WPF\obj\Release\CarWash WPF.csproj.ResolveComReference.cache
+C:\Users\Nekit\Documents\GitHub\CarWash\Car wash WPF upd\CarWash WPF\obj\Release\LoginPage.g.cs
+C:\Users\Nekit\Documents\GitHub\CarWash\Car wash WPF upd\CarWash WPF\obj\Release\MainWindow.g.cs
+C:\Users\Nekit\Documents\GitHub\CarWash\Car wash WPF upd\CarWash WPF\obj\Release\ReportsWindow.g.cs
+C:\Users\Nekit\Documents\GitHub\CarWash\Car wash WPF upd\CarWash WPF\obj\Release\SignUp.g.cs
+C:\Users\Nekit\Documents\GitHub\CarWash\Car wash WPF upd\CarWash WPF\obj\Release\App.g.cs
+C:\Users\Nekit\Documents\GitHub\CarWash\Car wash WPF upd\CarWash WPF\obj\Release\CarWash WPF_MarkupCompile.cache
+C:\Users\Nekit\Documents\GitHub\CarWash\Car wash WPF upd\CarWash WPF\obj\Release\CarWash WPF_MarkupCompile.lref
+C:\Users\Nekit\Documents\GitHub\CarWash\Car wash WPF upd\CarWash WPF\obj\Release\LoginPage.baml
+C:\Users\Nekit\Documents\GitHub\CarWash\Car wash WPF upd\CarWash WPF\obj\Release\MainWindow.baml
+C:\Users\Nekit\Documents\GitHub\CarWash\Car wash WPF upd\CarWash WPF\obj\Release\ReportsWindow.baml
+C:\Users\Nekit\Documents\GitHub\CarWash\Car wash WPF upd\CarWash WPF\obj\Release\SignUp.baml
+C:\Users\Nekit\Documents\GitHub\CarWash\Car wash WPF upd\CarWash WPF\obj\Release\CarWash WPF.g.resources
+C:\Users\Nekit\Documents\GitHub\CarWash\Car wash WPF upd\CarWash WPF\obj\Release\CarWash_WPF.Properties.Resources.resources
+C:\Users\Nekit\Documents\GitHub\CarWash\Car wash WPF upd\CarWash WPF\obj\Release\CarWash WPF.csproj.GenerateResource.Cache
+C:\Users\Nekit\Documents\GitHub\CarWash\Car wash WPF upd\CarWash WPF\obj\Release\CarWash WPF.csproj.CoreCompileInputs.cache
+C:\Users\Nekit\Documents\GitHub\CarWash\Car wash WPF upd\CarWash WPF\obj\Release\CarWash WPF.exe
+C:\Users\Nekit\Documents\GitHub\CarWash\Car wash WPF upd\CarWash WPF\obj\Release\CarWash WPF.pdb

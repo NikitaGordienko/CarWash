@@ -109,7 +109,7 @@ namespace CarWash_WPF
             try
             {
                 // Переменные для формирования запроса
-                string appointmentFullQuery = "SELECT * FROM APPOINTMENT WHERE 1";
+                string appointmentFullQuery = "SELECT * FROM appointment WHERE 1";
                 string queryPartDate;
                 string queryPartPrice;
                 string queryPartDiagnostics;
@@ -137,16 +137,15 @@ namespace CarWash_WPF
                 if (cbTurnOnPriceSort.IsChecked == true)
                 {
                     int res;
-                    string sign = SignForPriceSort.SelectedItem.ToString();
-                    string price = PriceBox.Text;
-                    if (string.IsNullOrEmpty(price))
+                    string sign = SignForPriceSort.SelectedItem.ToString();                  
+                    if (string.IsNullOrEmpty(PriceBox.Text))
                         throw new Exception(@"Поле ""Цена"" не заполнено!");
-                    bool isNumeric = int.TryParse(price, out res);
-                    if (res == 0)
+                    bool isNumeric = int.TryParse(PriceBox.Text, out res);
+                    if (isNumeric==false)
                         throw new Exception(@"Поле ""Цена"" должно быть числовым!"); 
                     if (int.Parse(PriceBox.Text.ToString()) <= 0) 
                         throw new Exception("Недопустимая цена");
-                    queryPartPrice = $" AND PRICE {sign} {price}";
+                    queryPartPrice = $" AND PRICE {sign} {PriceBox.Text}";
                 }
                 else queryPartPrice = ""; 
 
@@ -169,15 +168,14 @@ namespace CarWash_WPF
                 if (cbTurnOnBox.IsChecked == true)
                 {
                     int res;
-                    string box = BoxBox.Text;
-                    if (string.IsNullOrEmpty(box))
+                    if (string.IsNullOrEmpty(BoxBox.Text))
                         throw new Exception("Поле \"Номер бокса\" не заполнено!");
-                    bool isNumeric = int.TryParse(box, out res);
-                    if (res == 0)
-                        throw new Exception("Поле \"Номер бокса\" должно быть числовым!"); // если ввести 0, тоже ошибка 
+                    bool isNumeric = int.TryParse(BoxBox.Text, out res);
+                    if (isNumeric==false)
+                        throw new Exception("Поле \"Номер бокса\" должно быть числовым!"); 
                     if (int.Parse(BoxBox.Text.ToString()) <= 0)
                         throw new Exception("Неверный номер бокса");
-                    queryPartBox = $" AND BOX_NUMBER = {box}";
+                    queryPartBox = $" AND BOX_NUMBER = {BoxBox.Text}";
                 }
                 else queryPartBox = "";
 
@@ -211,8 +209,8 @@ namespace CarWash_WPF
                 // Переменные для формирования запроса
                 int res;
                 string sign = SignForRateSort.SelectedItem.ToString();
-                bool isNumeric = int.TryParse(sign, out res);
-                if (res != 0)
+                bool isNumeric = int.TryParse(RateBox.Text, out res);
+                if (isNumeric==false)
                     throw new Exception("Поле \"Рейтинг\" должно быть числовым!");
                 if (!(int.Parse(RateBox.Text.ToString()) >= 1 & int.Parse(RateBox.Text.ToString()) <= 5))
                     throw new Exception("Недопустимое значение рейтинга");
