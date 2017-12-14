@@ -19,3 +19,21 @@ C:\Users\Nekit\Documents\GitHub\CarWash\Car wash WPF upd\CarWashTest\bin\Debug\M
 C:\Users\Nekit\Documents\GitHub\CarWash\Car wash WPF upd\CarWashTest\bin\Debug\CarWash WPF.pdb
 C:\Users\Nekit\Documents\GitHub\CarWash\Car wash WPF upd\CarWashTest\bin\Debug\CarWash WPF.exe.config
 C:\Users\Nekit\Documents\GitHub\CarWash\Car wash WPF upd\CarWashTest\bin\Debug\MySql.Data.xml
+D:\GitHub\Projects\CarWash\Car wash WPF upd\CarWashTest\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.dll
+D:\GitHub\Projects\CarWash\Car wash WPF upd\CarWashTest\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.Interface.dll
+D:\GitHub\Projects\CarWash\Car wash WPF upd\CarWashTest\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.dll
+D:\GitHub\Projects\CarWash\Car wash WPF upd\CarWashTest\bin\Debug\ru\Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.resources.dll
+D:\GitHub\Projects\CarWash\Car wash WPF upd\CarWashTest\bin\Debug\ru\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.resources.dll
+D:\GitHub\Projects\CarWash\Car wash WPF upd\CarWashTest\bin\Debug\ru\Microsoft.VisualStudio.TestPlatform.TestFramework.resources.dll
+D:\GitHub\Projects\CarWash\Car wash WPF upd\CarWashTest\bin\Debug\CarWashTest.dll
+D:\GitHub\Projects\CarWash\Car wash WPF upd\CarWashTest\bin\Debug\CarWashTest.pdb
+D:\GitHub\Projects\CarWash\Car wash WPF upd\CarWashTest\bin\Debug\CarWash WPF.exe
+D:\GitHub\Projects\CarWash\Car wash WPF upd\CarWashTest\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.dll
+D:\GitHub\Projects\CarWash\Car wash WPF upd\CarWashTest\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll
+D:\GitHub\Projects\CarWash\Car wash WPF upd\CarWashTest\bin\Debug\CarWash WPF.pdb
+D:\GitHub\Projects\CarWash\Car wash WPF upd\CarWashTest\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.xml
+D:\GitHub\Projects\CarWash\Car wash WPF upd\CarWashTest\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.xml
+D:\GitHub\Projects\CarWash\Car wash WPF upd\CarWashTest\bin\Debug\MySql.Data.xml
+D:\GitHub\Projects\CarWash\Car wash WPF upd\CarWashTest\obj\Debug\CarWashTest.csprojResolveAssemblyReference.cache
+D:\GitHub\Projects\CarWash\Car wash WPF upd\CarWashTest\obj\Debug\CarWashTest.dll
+D:\GitHub\Projects\CarWash\Car wash WPF upd\CarWashTest\obj\Debug\CarWashTest.pdb

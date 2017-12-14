@@ -18,6 +18,7 @@ namespace CarWashTest
             string expectedStatus = "Execute-Success";
             Assert.AreEqual(expectedStatus, actualStatus, false, "Значения не совпадают. Тест не пройден.");
         }
+
         [TestMethod]
         public void ExecuteQueryTestFailure()
         {
@@ -27,6 +28,15 @@ namespace CarWashTest
             string actualStatus = Database.ExecuteWriter(query);
             string expectedStatus = "Execute-Success";
             Console.WriteLine(actualStatus);
+            Assert.AreEqual(expectedStatus, actualStatus, false, "Значения не совпадают. Тест не пройден.");
+        }
+
+        [TestMethod]
+        public void ChangeDateToDatabaseFormatSuccess()
+        {
+            string originalDate = "16.12.2017";
+            string actualStatus = Database.ChangeDateToDatabaseFormat(originalDate);
+            string expectedStatus = "2017-12-16";
             Assert.AreEqual(expectedStatus, actualStatus, false, "Значения не совпадают. Тест не пройден.");
         }
     }
