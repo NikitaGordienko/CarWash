@@ -10,16 +10,29 @@ using System.Windows.Controls;
 
 namespace CarWash_WPF
 {
-    public static class Database
+    public class Database
     {
+        private static Database instance;
+
+        private Database()
+        {
+
+        }
+
+        public static Database GetInstance()
+        {
+            if (instance == null)
+                instance = new Database();
+            return instance;
+        }
         // Строка подключения. Используется в качестве параметра для установки подключения.
-        //private const string connectionString = "Server=localhost;Database=carwash;User Id=root;Password=;charset=utf8";
-        private const string connectionString = "Server=185.26.122.48;Database=host1277275_nik;User Id=host1277275_nik;Password=123456789";
+        private const string connectionString = "Server=localhost;Database=carwash;User Id=root;Password=;charset=utf8";
+        //private const string connectionString = "Server=185.26.122.48;Database=host1277275_nik;User Id=host1277275_nik;Password=123456789";
         // Объект MySQLConnection. Используется в метотдах в качестве объекта подключения
         private static MySqlConnection connection = new MySqlConnection(connectionString);
 
         // Выводит результат запроса в консоль. Не используется.
-        public static void ExecuteReader(string query) 
+        public void ExecuteReader(string query) 
         {
             try
             {
@@ -57,7 +70,7 @@ namespace CarWash_WPF
         }
         
         // Исполняет запрос на UPDATE, DELETE и т. п. На вход получает строковую переменную с запросом
-        public static string ExecuteWriter(string query)
+        public string ExecuteWriter(string query)
         {
             string executeStatus = "Execute";
             try // Блок TryCatchFinally №1. Основное назначение - проверить наличие подключения и в случае его отсутствия выдать сообщение об ошибке
@@ -93,7 +106,7 @@ namespace CarWash_WPF
         }
 
         // Исполнение запроса на SELECT и получение результата в качестве объекта DataTable
-        public static DataTable CreateDataTable(string query)
+        public DataTable CreateDataTable(string query)
         {
             try
             {
@@ -120,7 +133,7 @@ namespace CarWash_WPF
 
         // в MySQL дата отображается в формате ГГГГ-ММ-ДД. В программе используется формат ДД.ММ.ГГГГ
         // Метод используется для обеспечения совместимости
-        public static string ChangeDateToDatabaseFormat(string originalDate)
+        public string ChangeDateToDatabaseFormat(string originalDate)
         {
             string newDate = "";
             string tempYear = originalDate.Substring(6, 4);
@@ -131,14 +144,14 @@ namespace CarWash_WPF
         }
 
         // На вход получает объект таблицы, который соответствует DG и индекс выбранной строки в DG
-        public static string FormDeleteRecordQuery(DataTable editableTable, DataTable whereTable, int selectedIndex)
+        public string FormDeleteRecordQuery(DataTable editableTable, DataTable whereTable, int selectedIndex)
         {
             int selectedID = IdentifyID(editableTable, selectedIndex);
             string query = $"DELETE FROM {editableTable.TableName} WHERE {whereTable.TableName}_id = {selectedID};";
             return query;
         }
 
-        public static string FormChangeRecordQuery(DataTable editableTable, DataTable whereTable, int selectedIndex, bool withDate)
+        public string FormChangeRecordQuery(DataTable editableTable, DataTable whereTable, int selectedIndex, bool withDate)
         {
             /*
              * Пока что запрос формируется на основе массива rowElements, который потом нужно будет передавать в метод в качестве параметра массива измененных значений
@@ -168,7 +181,7 @@ namespace CarWash_WPF
         }
 
         // Метод предназначен для определения значения поля ID выделенной записи
-        public static int IdentifyID(DataTable editableTable, int selectedIndex)
+        public int IdentifyID(DataTable editableTable, int selectedIndex)
         {
             int id = (int)editableTable.Rows[selectedIndex][0]; // Выбранная строка + Столбец №0
             return id;
@@ -178,7 +191,7 @@ namespace CarWash_WPF
         // Например изменение удаленной строки или изменение одной строки несколько раз
         // В приоритет взят запрос на DELETE, т.к либо пользователь удаляет измененную строку, либо пытается изменить уже удаленную строку.
         // Если формируется два запроса на UPDATE одной строке, то приоритет отдается последнему запросу
-        public static List<string> EliminateQueryInconsistency(List<string> queryList)
+        public List<string> EliminateQueryInconsistency(List<string> queryList)
         {
             List<string> tempList = new List<string>();
             List<string> finalList = new List<string>();
@@ -205,7 +218,7 @@ namespace CarWash_WPF
 
         // Вспомогательный метод для EliminateQueryInconsistency
         // Позволяет в рамках списка запросов для определенного ID выделить приоритеный запрос, а остальные удалить
-        public static List<string> DeleteDuplication(List<string> tempList)
+        public List<string> DeleteDuplication(List<string> tempList)
         {
             int k = 0;
             while (tempList.Count != 1) // Цикл работает пока не останется один запрос на DELETE или UPDATE
@@ -238,7 +251,7 @@ namespace CarWash_WPF
 
         // Вспомогательный метод для EliminateQueryInconsistency
         // Удаляет все записи, содержащие строку NULL
-        public static List<string> RemoveNullItems(List<string> finalList)
+        public List<string> RemoveNullItems(List<string> finalList)
         {
             while (finalList.Contains("NULL"))
             {

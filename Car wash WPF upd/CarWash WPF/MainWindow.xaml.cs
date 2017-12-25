@@ -27,6 +27,7 @@ namespace CarWash_WPF
         private readonly string ShowAllAppointmentsQuery = @"SELECT * FROM appointment";
         private readonly string ShowAllFeedbackQuery = @"SELECT * FROM review";
         private DataSet DS = new DataSet("Carwash");
+        private Database DB = Database.GetInstance();
 
         public MainWindow()
         {
@@ -34,11 +35,11 @@ namespace CarWash_WPF
             try
             {
                 //Создание объектов DataTable
-                DataTable ClientsDT = Database.CreateDataTable(ShowAllClientsQuery);
+                DataTable ClientsDT = DB.CreateDataTable(ShowAllClientsQuery);
                 ClientsDT.TableName = "client";
-                DataTable AppointmentsDT = Database.CreateDataTable(ShowAllAppointmentsQuery);
+                DataTable AppointmentsDT = DB.CreateDataTable(ShowAllAppointmentsQuery);
                 AppointmentsDT.TableName = "appointment";
-                DataTable FeedbackDT = Database.CreateDataTable(ShowAllFeedbackQuery);
+                DataTable FeedbackDT = DB.CreateDataTable(ShowAllFeedbackQuery);
                 FeedbackDT.TableName = "review";
 
                 // Добавление таблиц в объект DataSet
@@ -133,7 +134,7 @@ namespace CarWash_WPF
 
         private void btnReports_Click(object sender, RoutedEventArgs e)
         {
-            ReportsWindow rw = new ReportsWindow(DS);
+            ReportsWindow rw = new ReportsWindow(DS, DB);
             rw.ShowDialog();
         }
 
@@ -169,24 +170,24 @@ namespace CarWash_WPF
         private void btnApplyClientChanges_Click(object sender, RoutedEventArgs e)
         {
             int currentRowIndex = DGClients.SelectedIndex;
-            string updateQuery = Database.FormChangeRecordQuery(DS.Tables[0], DS.Tables[0], currentRowIndex, false);
+            string updateQuery = DB.FormChangeRecordQuery(DS.Tables[0], DS.Tables[0], currentRowIndex, false);
             queryListClients.Add(updateQuery);
         }
 
         private void btnDeleteClients_Click(object sender, RoutedEventArgs e)
         {
             int currentRowIndex = DGClients.SelectedIndex;
-            string deleteQuery = Database.FormDeleteRecordQuery(DS.Tables[0], DS.Tables[0], currentRowIndex);
+            string deleteQuery = DB.FormDeleteRecordQuery(DS.Tables[0], DS.Tables[0], currentRowIndex);
             queryListClients.Add(deleteQuery);
         }
 
         private void btnSendClientQuery_Click(object sender, RoutedEventArgs e)
         {
-            queryListClients = Database.EliminateQueryInconsistency(queryListClients);
+            queryListClients = DB.EliminateQueryInconsistency(queryListClients);
             for (int i = 0; i < queryListClients.Count; i++)
             {
                 MessageBox.Show(queryListClients[i]);
-                Database.ExecuteWriter(queryListClients[i]);
+                DB.ExecuteWriter(queryListClients[i]);
             }
         }
 
@@ -203,24 +204,24 @@ namespace CarWash_WPF
         private void btnApplyAppointmentChanges_Click(object sender, RoutedEventArgs e)
         {
             int currentRowIndex = DGAppointments.SelectedIndex;
-            string updateQuery = Database.FormChangeRecordQuery(DS.Tables[1], DS.Tables[1], currentRowIndex, true);
+            string updateQuery = DB.FormChangeRecordQuery(DS.Tables[1], DS.Tables[1], currentRowIndex, true);
             queryListAppointments.Add(updateQuery);
         }
 
         private void btnDeleteAppointments_Click(object sender, RoutedEventArgs e)
         {
             int currentRowIndex = DGAppointments.SelectedIndex;
-            string deleteQuery = Database.FormDeleteRecordQuery(DS.Tables[1], DS.Tables[1], currentRowIndex);
+            string deleteQuery = DB.FormDeleteRecordQuery(DS.Tables[1], DS.Tables[1], currentRowIndex);
             queryListAppointments.Add(deleteQuery);
         }
 
         private void btnSendAppointmentQuery_Click(object sender, RoutedEventArgs e)
         {
-            queryListAppointments = Database.EliminateQueryInconsistency(queryListAppointments);
+            queryListAppointments = DB.EliminateQueryInconsistency(queryListAppointments);
             for (int i = 0; i < queryListAppointments.Count; i++)
             {
                 //MessageBox.Show(queryListAppointments[i]);
-                Database.ExecuteWriter(queryListAppointments[i]);
+                DB.ExecuteWriter(queryListAppointments[i]);
             }
         }
 
@@ -236,24 +237,24 @@ namespace CarWash_WPF
         private void btnApplyFeedbackChanges_Click(object sender, RoutedEventArgs e)
         {
             int currentRowIndex = DGFeedback.SelectedIndex;
-            string updateQuery = Database.FormChangeRecordQuery(DS.Tables[2], DS.Tables[1], currentRowIndex, false);
+            string updateQuery = DB.FormChangeRecordQuery(DS.Tables[2], DS.Tables[1], currentRowIndex, false);
             queryListFeedback.Add(updateQuery);
         }
 
         private void btnDeleteFeedback_Click(object sender, RoutedEventArgs e)
         {
             int currentRowIndex = DGFeedback.SelectedIndex;
-            string deleteQuery = Database.FormDeleteRecordQuery(DS.Tables[2], DS.Tables[1], currentRowIndex); //второй передаваемый параметр -> DS.Tables[1], т.к. при удалении из таблицы REVIEW требует appointment_id
+            string deleteQuery = DB.FormDeleteRecordQuery(DS.Tables[2], DS.Tables[1], currentRowIndex); //второй передаваемый параметр -> DS.Tables[1], т.к. при удалении из таблицы REVIEW требует appointment_id
             queryListFeedback.Add(deleteQuery);
         }
 
         private void btnSendFeedbackQuery_Click(object sender, RoutedEventArgs e)
         {
-            queryListFeedback = Database.EliminateQueryInconsistency(queryListFeedback);
+            queryListFeedback = DB.EliminateQueryInconsistency(queryListFeedback);
             for (int i = 0; i < queryListFeedback.Count; i++)
             {
                 //MessageBox.Show(queryListFeedback[i]);
-                Database.ExecuteWriter(queryListFeedback[i]);
+                DB.ExecuteWriter(queryListFeedback[i]);
             }
         }
     }

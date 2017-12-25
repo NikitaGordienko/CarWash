@@ -26,16 +26,18 @@ namespace CarWash_WPF
         DataTable ClientsByRegDateDT;
         DataTable AppointmentsByDateAndPriceDT;
         DataTable FeedbackByRateDT;
+        Database DB;
         List<string> collection = new List<string> { ">=", "=", "<=" }; // Используется в качестве параметра для фильтрации
 
         private static Excel.Application objApp;
         private static Excel._Workbook objBook;
 
         // Конструктор класса. Передает DataSet из главного окна в отчеты для отображения полного списка записей до фильтрации
-        public ReportsWindow(DataSet MainWindowsDS)
+        public ReportsWindow(DataSet DS, Database DB)
         {
             InitializeComponent();
-            DS = MainWindowsDS;
+            this.DS = DS;
+            this.DB = DB;
         }
 
         // Событие загрузки формы
@@ -84,14 +86,14 @@ namespace CarWash_WPF
                     throw new Exception("Вы не выбрали дату");
 
                 // Преобразование дат к формату MySQL(гггг-мм-дд) с помощью метода в классе Database
-                string startDate = Database.ChangeDateToDatabaseFormat(datePickerForClientsFrom.SelectedDate.ToString());
-                string endDate = Database.ChangeDateToDatabaseFormat(datePickerForClientsTo.SelectedDate.ToString());
+                string startDate = DB.ChangeDateToDatabaseFormat(datePickerForClientsFrom.SelectedDate.ToString());
+                string endDate = DB.ChangeDateToDatabaseFormat(datePickerForClientsTo.SelectedDate.ToString());
 
                 // Создание запроса
                 string showClientsByRegDateQuery = $@"SELECT * FROM client WHERE CLIENT_ID IN (SELECT CLIENT_ID FROM account WHERE REGISTRATION_DATE BETWEEN ""{startDate}"" AND ""{endDate}"")";
 
                 // Заполнение элемента DataTable на основе запроса
-                ClientsByRegDateDT = Database.CreateDataTable(showClientsByRegDateQuery);
+                ClientsByRegDateDT = DB.CreateDataTable(showClientsByRegDateQuery);
 
                 // Элемент DGV переопределяется в соответствии с новым источником
                 DGClientsByDate.ItemsSource = ClientsByRegDateDT.DefaultView;
@@ -128,8 +130,8 @@ namespace CarWash_WPF
                     if (datePickerAppointmentsFrom.SelectedDate.HasValue == false || datePickerAppointmentsTo.SelectedDate.HasValue == false)
                         throw new Exception("Вы не выбрали дату");
 
-                    string startDate = Database.ChangeDateToDatabaseFormat(datePickerAppointmentsFrom.ToString());
-                    string endDate = Database.ChangeDateToDatabaseFormat(datePickerAppointmentsTo.ToString());
+                    string startDate = DB.ChangeDateToDatabaseFormat(datePickerAppointmentsFrom.ToString());
+                    string endDate = DB.ChangeDateToDatabaseFormat(datePickerAppointmentsTo.ToString());
                     queryPartDate = $" AND APPOINTMENT_DATE BETWEEN '{startDate}' AND '{endDate}'";
                 }
                 else queryPartDate = ""; // или определить сверху
@@ -192,7 +194,7 @@ namespace CarWash_WPF
                 // Построение итогового запроса
                 appointmentFullQuery += queryPartDate + queryPartPrice + queryPartDiagnostics + queryPartInterior + queryPartBox + queryPartClass;
                 // Заполнение элемента DataTable на основе запроса
-                AppointmentsByDateAndPriceDT = Database.CreateDataTable(appointmentFullQuery);
+                AppointmentsByDateAndPriceDT = DB.CreateDataTable(appointmentFullQuery);
                 // Элемент DG переопределяется в соответствии с новым источником
                 DGAppointmentsByDateAndPrice.ItemsSource = AppointmentsByDateAndPriceDT.DefaultView;
             }
@@ -219,7 +221,7 @@ namespace CarWash_WPF
                 string showFeedBackByRateQuery = $@"SELECT * FROM review WHERE VALUE {sign} {rating}";
 
                 // Заполнение элемента DataTable на основе запроса
-                FeedbackByRateDT = Database.CreateDataTable(showFeedBackByRateQuery);
+                FeedbackByRateDT = DB.CreateDataTable(showFeedBackByRateQuery);
 
                 // Элемент DG переопределяется в соответствии с новым источником
                 DGFeedbackByRate.ItemsSource = FeedbackByRateDT.DefaultView;
