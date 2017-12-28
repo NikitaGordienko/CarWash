@@ -81,12 +81,12 @@ namespace CarWash_WPF
                         }
                         else
                         {
-                            MessageBox.Show("Пароль введен неверно!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                            MessageBox.Show("Логин или пароль введены неверно!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
                         }
                     }
                     else
                     {
-                        MessageBox.Show("Пользователя с таким логином не существует!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        MessageBox.Show("Логин или пароль введены неверно!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
                     }
 
                 }
