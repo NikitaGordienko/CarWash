@@ -26,8 +26,8 @@ namespace CarWash_WPF
             InitializeComponent();
         }
 
-        private static string connectionString = @"Data Source=localhost;Initial Catalog=carwash;User ID=root;Password=""""; charset=utf8";
-        //private static string connectionString = "Server=185.26.122.48;Database=host1277275_nik;User Id=host1277275_nik;Password=123456789";
+        //private static string connectionString = @"Data Source=localhost;Initial Catalog=carwash;User ID=root;Password=""""; charset=utf8";
+        private static string connectionString = "Server=185.26.122.48;Database=host1277275_nik;User Id=host1277275_nik;Password=123456789";
         private static MySqlConnection connection = new MySqlConnection(connectionString);
 
         public static string GetSHA256Hash(string input)
