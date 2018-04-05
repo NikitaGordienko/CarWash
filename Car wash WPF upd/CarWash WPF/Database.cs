@@ -11,7 +11,7 @@ using System.Windows.Controls;
 namespace CarWash_WPF
 {
     public class Database
-    {
+    {	// Тест
         private static Database instance;
 
         private Database()
